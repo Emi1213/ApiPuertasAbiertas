@@ -1,0 +1,6 @@
+@ApiPuertasAbiertas.API_HostAddress = http://localhost:5022
+
+GET {{ApiPuertasAbiertas.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
