@@ -107,6 +107,40 @@
         "frameworkReferences": [
           "Microsoft.AspNetCore.App"
         ]
+      },
+      "ApiPuertasAbiertas.Application/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "ApiPuertasAbiertas.Domain": "1.0.0",
+          "ApiPuertasAbiertas.Shared": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/ApiPuertasAbiertas.Application.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ApiPuertasAbiertas.Application.dll": {}
+        }
+      },
+      "ApiPuertasAbiertas.Domain/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ApiPuertasAbiertas.Domain.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ApiPuertasAbiertas.Domain.dll": {}
+        }
+      },
+      "ApiPuertasAbiertas.Shared/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "compile": {
+          "bin/placeholder/ApiPuertasAbiertas.Shared.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/ApiPuertasAbiertas.Shared.dll": {}
+        }
       }
     }
   },
@@ -451,10 +485,26 @@
         "swashbuckle.aspnetcore.swaggerui.6.4.0.nupkg.sha512",
         "swashbuckle.aspnetcore.swaggerui.nuspec"
       ]
+    },
+    "ApiPuertasAbiertas.Application/1.0.0": {
+      "type": "project",
+      "path": "../ApiPuertasAbiertas.Application/ApiPuertasAbiertas.Application.csproj",
+      "msbuildProject": "../ApiPuertasAbiertas.Application/ApiPuertasAbiertas.Application.csproj"
+    },
+    "ApiPuertasAbiertas.Domain/1.0.0": {
+      "type": "project",
+      "path": "../ApiPuertasAbiertas.Domain/ApiPuertasAbiertas.Domain.csproj",
+      "msbuildProject": "../ApiPuertasAbiertas.Domain/ApiPuertasAbiertas.Domain.csproj"
+    },
+    "ApiPuertasAbiertas.Shared/1.0.0": {
+      "type": "project",
+      "path": "../ApiPuertasAbiertas.Shared/ApiPuertasAbiertas.Shared.csproj",
+      "msbuildProject": "../ApiPuertasAbiertas.Shared/ApiPuertasAbiertas.Shared.csproj"
     }
   },
   "projectFileDependencyGroups": {
     "net8.0": [
+      "ApiPuertasAbiertas.Application >= 1.0.0",
       "Microsoft.AspNetCore.OpenApi >= 8.0.3",
       "Swashbuckle.AspNetCore >= 6.4.0"
     ]
@@ -485,7 +535,11 @@
       "frameworks": {
         "net8.0": {
           "targetAlias": "net8.0",
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\emi12\\source\\repos\\ApiPuertasAbiertas\\ApiPuertasAbiertas.Application\\ApiPuertasAbiertas.Application.csproj": {
+              "projectPath": "C:\\Users\\emi12\\source\\repos\\ApiPuertasAbiertas\\ApiPuertasAbiertas.Application\\ApiPuertasAbiertas.Application.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
