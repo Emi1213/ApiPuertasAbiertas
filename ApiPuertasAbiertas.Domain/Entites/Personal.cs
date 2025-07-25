@@ -8,4 +8,5 @@ public class Personal
   public required bool Estado { get; set; }
   public int EmpresaId { get; set; }
   public required Empresa Empresa { get; set; }
+  public ICollection<Ingreso> Ingresos { get; set; } = new List<Ingreso>();
 }
