@@ -1,8 +1,11 @@
 {
   "version": 2,
-  "dgSpecHash": "xP08vH8v6dtI8RcpcJzQn/7pk6IgZgxRX/x/SfWF6IhlO0HW9jzLEqPjqsVaRfCa60LsQTuxylxEyE3jw2TTRQ==",
+  "dgSpecHash": "3tn1+aveuQEWJHzOMuxq0BHZdOIItek87Q6lvC8ImbjKZwHUFRo6Ja7sePg80c4wW++qLGEldivivsWDcIltlw==",
   "success": true,
   "projectFilePath": "C:\\Users\\emi12\\source\\repos\\ApiPuertasAbiertas\\ApiPuertasAbiertas.Application\\ApiPuertasAbiertas.Application.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\emi12\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\emi12\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512"
+  ],
   "logs": []
 }

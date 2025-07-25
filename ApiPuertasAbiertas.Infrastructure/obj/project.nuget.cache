@@ -1,13 +1,15 @@
 {
   "version": 2,
-  "dgSpecHash": "xllJ7dwV5caxFpGuiqQCDTrBcMnZcvZU3ShWMHw+h7cr0iWnPRlSU6JCq0H7Ifj4hTHRCr6xjgw5mRloUIxRBw==",
+  "dgSpecHash": "4K35D3OaUBV2TbTVj34sq0ORLRvwceHDJnmjYyXe1MGhSh2pRAb74MuXxwSy/S78AMqJVzKQlxEKL0htO/nfjA==",
   "success": true,
   "projectFilePath": "C:\\Users\\emi12\\source\\repos\\ApiPuertasAbiertas\\ApiPuertasAbiertas.Infrastructure\\ApiPuertasAbiertas.Infrastructure.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\emi12\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
+    "C:\\Users\\emi12\\.nuget\\packages\\automapper.extensions.microsoft.dependencyinjection\\12.0.1\\automapper.extensions.microsoft.dependencyinjection.12.0.1.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\azure.core\\1.38.0\\azure.core.1.38.0.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\azure.identity\\1.11.4\\azure.identity.1.11.4.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\1.1.1\\microsoft.bcl.asyncinterfaces.1.1.1.nupkg.sha512",
-    "C:\\Users\\emi12\\.nuget\\packages\\microsoft.csharp\\4.5.0\\microsoft.csharp.4.5.0.nupkg.sha512",
+    "C:\\Users\\emi12\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.data.sqlclient\\5.1.6\\microsoft.data.sqlclient.5.1.6.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.data.sqlclient.sni.runtime\\5.1.1\\microsoft.data.sqlclient.sni.runtime.5.1.1.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.entityframeworkcore\\9.0.7\\microsoft.entityframeworkcore.9.0.7.nupkg.sha512",

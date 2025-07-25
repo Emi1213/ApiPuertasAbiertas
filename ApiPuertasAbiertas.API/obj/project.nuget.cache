@@ -1,10 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "GbCSY1NDcHZGSTXLEXTi2EhKBXPIT8eAqUVvLe3sobbCwjZ6ES6OtwmG+BzVD9vRq+BO8qrx0Ngol8vEV1KQ0w==",
+  "dgSpecHash": "eRh8dOgm0Wm7LOZ9nADLGbZ5st+kTIF0EyOdqOF3uaXIrHtlzPTaUfpoWBvPj15Tx9qY/mewPEdoiXTFtlHTvA==",
   "success": true,
   "projectFilePath": "C:\\Users\\emi12\\source\\repos\\ApiPuertasAbiertas\\ApiPuertasAbiertas.API\\ApiPuertasAbiertas.API.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\emi12\\.nuget\\packages\\automapper\\12.0.1\\automapper.12.0.1.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.aspnetcore.openapi\\8.0.3\\microsoft.aspnetcore.openapi.8.0.3.nupkg.sha512",
+    "C:\\Users\\emi12\\.nuget\\packages\\microsoft.csharp\\4.7.0\\microsoft.csharp.4.7.0.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.extensions.apidescription.server\\6.0.5\\microsoft.extensions.apidescription.server.6.0.5.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\microsoft.openapi\\1.4.3\\microsoft.openapi.1.4.3.nupkg.sha512",
     "C:\\Users\\emi12\\.nuget\\packages\\swashbuckle.aspnetcore\\6.4.0\\swashbuckle.aspnetcore.6.4.0.nupkg.sha512",
