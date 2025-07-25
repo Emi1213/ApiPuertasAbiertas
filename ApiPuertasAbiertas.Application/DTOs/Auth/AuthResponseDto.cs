@@ -2,7 +2,7 @@ namespace ApiPuertasAbiertas.Application.DTOs.Auth;
 
 public class AuthResponseDto
 {
-  public string Token { get; set; } = null!;
+  public required string Token { get; set; }
   public DateTime Expiration { get; set; }
-  public string Usuario { get; set; } = null!;
+  public required string Usuario { get; set; }
 }
