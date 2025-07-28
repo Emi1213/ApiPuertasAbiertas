@@ -4,11 +4,14 @@ using ApiPuertasAbiertas.API.Configuration;
 using System.Text;
 using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Infrastructure.Services;
+using ApiPuertasAbiertas.Infrastructure.Persistence;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// builder.Services.AddDbContext<AppDbContext>(options =>
-//     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddDbContext<AppDbContext>(options =>
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 
 builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
 builder.Services.AddControllers();
@@ -17,26 +20,31 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// var jwtSettings = builder.Configuration.GetSection("Jwt");
-// var clave = jwtSettings["Key"];
+builder.Services.AddResponseCompression(options =>
+{
+  options.EnableForHttps = true;
+});
 
-// builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
-//     .AddJwtBearer(options =>
-//     {
-//         options.TokenValidationParameters = new TokenValidationParameters
-//         {
-//             ValidateIssuer = true,
-//             ValidateAudience = true,
-//             ValidateLifetime = true,
-//             ValidateIssuerSigningKey = true,
+var jwtSettings = builder.Configuration.GetSection("JwtSettings");
+var clave = jwtSettings["Key"];
 
-//             ValidIssuer = jwtSettings["Issuer"],
-//             ValidAudience = jwtSettings["Audience"],
-//             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clave!))
-//         };
-//     });
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+      options.TokenValidationParameters = new TokenValidationParameters
+      {
+        ValidateIssuer = true,
+        ValidateAudience = true,
+        ValidateLifetime = true,
+        ValidateIssuerSigningKey = true,
 
-// builder.Services.AddAuthorization();
+        ValidIssuer = jwtSettings["Issuer"],
+        ValidAudience = jwtSettings["Audience"],
+        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clave!))
+      };
+    });
+
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
@@ -46,7 +54,7 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-
+app.UseResponseCompression();
 app.UseHttpsRedirection();
 
 // app.UseAuthentication();

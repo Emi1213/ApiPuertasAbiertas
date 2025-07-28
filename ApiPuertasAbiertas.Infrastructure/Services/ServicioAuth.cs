@@ -31,18 +31,17 @@ public class ServicioAuth : IServicioAuth
 
     var claims = new List<Claim>
     {
-      new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
       new Claim(ClaimTypes.Name, usuario.NombreUsuario),
       new Claim(ClaimTypes.Role, usuario.Perfil?.Nombre ?? "Usuario")
     };
 
-    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!));
+    var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-    var expiracion = DateTime.Now.AddMinutes(Convert.ToDouble(_config["Jwt:ExpirationMinutes"]));
+    var expiracion = DateTime.UtcNow.AddMinutes(Convert.ToDouble(_config["JwtSettings:ExpirationMinutes"]));
 
     var token = new JwtSecurityToken(
-      issuer: _config["Jwt:Issuer"],
-      audience: _config["Jwt:Audience"],
+      issuer: _config["JwtSettings:Issuer"],
+      audience: _config["JwtSettings:Audience"],
       claims: claims,
       expires: expiracion,
       signingCredentials: creds
