@@ -6,9 +6,9 @@ public static class ApiRespuestaFactory
   {
     return new ApiRespuesta<T>
     {
-      exitoso = true,
-      mensaje = mensaje,
-      datos = datos
+      Exitoso = true,
+      Mensaje = mensaje,
+      Datos = datos
     };
   }
 
@@ -16,9 +16,9 @@ public static class ApiRespuestaFactory
   {
     return new ApiRespuesta<T>
     {
-      exitoso = false,
-      mensaje = mensaje,
-      errores = errores
+      Exitoso = false,
+      Mensaje = mensaje,
+      Errores = errores
     };
   }
 }

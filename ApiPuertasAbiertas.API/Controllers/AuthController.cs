@@ -1,26 +1,27 @@
 using ApiPuertasAbiertas.Application.DTOs.Auth;
 using ApiPuertasAbiertas.Application.Interfaces;
+using ApiPuertasAbiertas.Application.UseCases.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
 [Route("api/[controller]")]
 public class AuthController : ControllerBase
 {
-  private readonly IServicioAuth _servicioAuth;
+  private readonly LoginUseCase _loginUseCase;
 
-  public AuthController(IServicioAuth servicioAuth)
+  public AuthController(LoginUseCase loginUseCase)
   {
-    _servicioAuth = servicioAuth;
+    _loginUseCase = loginUseCase;
   }
 
   [HttpPost("login")]
-  public async Task<IActionResult> Login([FromBody] LoginDto dto)
+  public async Task<object> Login([FromBody] LoginDto dto)
   {
-    var result = await _servicioAuth.AutenticarAsync(dto);
-    if (result == null)
-      return Unauthorized(new { mensaje = "Credenciales inválidas" });
+    var resultado = await _loginUseCase.ExecuteAsync(dto.Usuario, dto.Contrasenia);
+    if (resultado == null)
+      return Results.Unauthorized();
 
-    return Ok(result);
+    return Results.Ok(resultado);
   }
 
 }

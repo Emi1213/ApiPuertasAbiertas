@@ -1,11 +1,14 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
-using ApiPuertasAbiertas.API.Configuration;
+using ApiPuertasAbiertas.API.Middleware;
 using System.Text;
 using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Infrastructure.Services;
 using ApiPuertasAbiertas.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
+using ApiPuertasAbiertas.Application.UseCases.Auth;
+using ApiPuertasAbiertas.Domain.Repositories;
+using ApiPuertasAbiertas.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,9 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
+builder.Services.AddScoped<LoginUseCase>();
+builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
+
 builder.Services.AddControllers();
 
 
@@ -56,9 +62,10 @@ if (app.Environment.IsDevelopment())
 }
 app.UseResponseCompression();
 app.UseHttpsRedirection();
+app.UseStandardResponseWrapper();
 
-// app.UseAuthentication();
-// app.UseAuthorization();
+app.UseAuthentication();
+app.UseAuthorization();
 
 app.MapControllers();
 
