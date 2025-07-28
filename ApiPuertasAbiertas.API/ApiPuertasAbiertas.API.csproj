@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ApiPuertasAbiertas.Application\ApiPuertasAbiertas.Application.csproj" />
+    <ProjectReference Include="..\ApiPuertasAbiertas.Infrastructure\ApiPuertasAbiertas.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
