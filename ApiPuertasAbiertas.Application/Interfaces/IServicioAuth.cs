@@ -1,8 +1,9 @@
 namespace ApiPuertasAbiertas.Application.Interfaces;
 
 using ApiPuertasAbiertas.Application.DTOs.Auth;
+using ApiPuertasAbiertas.Domain.Entities;
 
 public interface IServicioAuth
 {
-  Task<AuthResponseDto?> AutenticarAsync(LoginDto dto);
+  string GenerarToken(Usuario usuario);
 }

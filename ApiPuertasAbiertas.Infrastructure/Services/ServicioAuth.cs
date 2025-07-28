@@ -7,29 +7,22 @@ using ApiPuertasAbiertas.Infrastructure.Persistence;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.EntityFrameworkCore;
+using ApiPuertasAbiertas.Domain.Entities;
 
 namespace ApiPuertasAbiertas.Infrastructure.Services;
 
 public class ServicioAuth : IServicioAuth
 {
   private readonly IConfiguration _config;
-  private readonly AppDbContext _context;
-  public ServicioAuth(IConfiguration config, AppDbContext context)
+  public ServicioAuth(IConfiguration config)
   {
     _config = config;
-    _context = context;
+
   }
 
-  public async Task<AuthResponseDto?> AutenticarAsync(LoginDto dto)
+  public string GenerarToken(Usuario usuario)
   {
-    var usuario = await _context.Usuarios
-    .FirstOrDefaultAsync(u => u.NombreUsuario == dto.Usuario && u.Contrasenia == dto.Contrasenia);
-
-
-    if (usuario == null)
-      return null;
-
-    var claims = new List<Claim>
+    var claims = new[]
     {
       new Claim(ClaimTypes.Name, usuario.NombreUsuario),
       new Claim(ClaimTypes.Role, usuario.Perfil?.Nombre ?? "Usuario")
@@ -47,11 +40,6 @@ public class ServicioAuth : IServicioAuth
       signingCredentials: creds
     );
 
-    return new AuthResponseDto
-    {
-      Token = new JwtSecurityTokenHandler().WriteToken(token),
-      Expiracion = expiracion,
-    };
-
+    return new JwtSecurityTokenHandler().WriteToken(token);
   }
 }
