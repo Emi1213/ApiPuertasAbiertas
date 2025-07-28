@@ -7,11 +7,12 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
 {
   public void Configure(EntityTypeBuilder<Usuario> builder)
   {
-    builder.ToTable("Usuarios");
+    builder.ToTable("Usuarios_tbl");
 
     builder.HasKey(u => u.Id);
 
     builder.Property(u => u.NombreUsuario)
+        .HasColumnName("Usuario")
         .IsRequired()
         .HasMaxLength(50);
 
@@ -26,9 +27,14 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
         .IsRequired()
         .HasMaxLength(255);
 
+    builder.Property(u => u.PerfilId)
+    .HasColumnName("Id_Perfil")
+    .IsRequired();
+
     builder.HasOne(u => u.Perfil)
-        .WithMany()
-        .HasForeignKey(u => u.PerfilId)
-        .OnDelete(DeleteBehavior.Cascade);
+      .WithMany(p => p.Usuarios)
+      .HasForeignKey(u => u.PerfilId)
+      .OnDelete(DeleteBehavior.Cascade);
+
   }
 }

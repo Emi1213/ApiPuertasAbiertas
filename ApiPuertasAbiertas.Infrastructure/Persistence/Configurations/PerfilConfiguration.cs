@@ -15,6 +15,10 @@ public class PerfilConfiguration : IEntityTypeConfiguration<Perfil>
     builder.Property(p => p.Descripcion)
         .HasMaxLength(500);
 
-    builder.HasMany(p => p.Usuarios).WithOne().HasForeignKey(e => e.PerfilId);
+    builder.HasMany(p => p.Usuarios)
+        .WithOne(u => u.Perfil)
+        .HasForeignKey(u => u.PerfilId)
+        .OnDelete(DeleteBehavior.Cascade);
+
   }
 }
