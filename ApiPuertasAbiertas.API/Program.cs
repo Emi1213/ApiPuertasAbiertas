@@ -9,6 +9,8 @@ using Microsoft.EntityFrameworkCore;
 using ApiPuertasAbiertas.Application.UseCases.Auth;
 using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Infrastructure.Repositories;
+using ApiPuertasAbiertas.Application.UseCases.Usuarios;
+using ApiPuertasAbiertas.Application.Profiles;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,6 +20,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
 builder.Services.AddScoped<LoginUseCase>();
+builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
 builder.Services.AddControllers();
@@ -25,6 +28,9 @@ builder.Services.AddControllers();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddAutoMapper(typeof(UsuarioProfile));
+builder.Services.AddAutoMapper(typeof(PerfilProfile));
+
 
 builder.Services.AddResponseCompression(options =>
 {
@@ -54,7 +60,6 @@ builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
   app.UseSwagger();
