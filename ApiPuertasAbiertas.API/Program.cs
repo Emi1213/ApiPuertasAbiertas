@@ -11,6 +11,9 @@ using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Infrastructure.Repositories;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using ApiPuertasAbiertas.Application.Profiles;
+using ApiPuertasAbiertas.API.Filters;
+using Microsoft.AspNetCore.Mvc;
+using ApiPuertasAbiertas.Shared.Responses;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,7 +26,35 @@ builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(
+  options =>
+  {
+    options.Filters.Add<JsonExceptionFilter>();
+  }
+);
+builder.Services.Configure<ApiBehaviorOptions>(options =>
+{
+  options.InvalidModelStateResponseFactory = context =>
+  {
+    var errores = context.ModelState
+          .Where(ms => ms.Value?.Errors.Count > 0)
+          .SelectMany(kvp =>
+              kvp.Value!.Errors.Select(e =>
+                  $"{(string.IsNullOrWhiteSpace(kvp.Key) || kvp.Key == "$" ? "Entrada" : kvp.Key)}: {e.ErrorMessage}"))
+          .ToList();
+
+    var response = new ApiRespuesta<object>
+    {
+      Exitoso = false,
+      Mensaje = "Error de validación",
+      Errores = errores,
+    };
+
+    return new BadRequestObjectResult(response);
+  };
+});
+
+
 
 
 builder.Services.AddEndpointsApiExplorer();

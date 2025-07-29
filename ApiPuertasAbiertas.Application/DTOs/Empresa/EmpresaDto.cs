@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace ApiPuertasAbiertas.Application.DTOs.Empresa;
 
-public class EmpresaDTO
+public class EmpresaDto
 {
   public int Id { get; set; }
   public required string Nombre { get; set; }
