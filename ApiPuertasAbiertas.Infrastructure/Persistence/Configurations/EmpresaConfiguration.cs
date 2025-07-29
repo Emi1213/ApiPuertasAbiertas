@@ -8,7 +8,7 @@ public class EmpresaConfiguration : IEntityTypeConfiguration<Empresa>
   public void Configure(EntityTypeBuilder<Empresa> builder)
   {
     builder.ToTable("Empresas_tbl");
-    
+
     builder.HasKey(e => e.Id);
 
     builder.Property(e => e.Nombre)
@@ -18,6 +18,9 @@ public class EmpresaConfiguration : IEntityTypeConfiguration<Empresa>
         .IsRequired()
         .HasDefaultValue(true);
 
-    builder.HasMany(e => e.Personal).WithOne().HasForeignKey(p => p.EmpresaId);
+    builder.HasMany(e => e.Personal)
+        .WithOne(p => p.Empresa)
+        .HasForeignKey(p => p.EmpresaId)
+        .OnDelete(DeleteBehavior.Cascade);
   }
 }

@@ -24,7 +24,8 @@ public class UsuarioController : ControllerBase
   public async Task<object> ObtenerPorId(int id)
   {
     var usuario = await _usuarioUseCases.ObtenerPorIdAsync(id);
-    if (usuario == null) return Results.NotFound();
+    if (usuario == null)
+      throw new KeyNotFoundException("Usuario no encontrado.");
     return Results.Ok(usuario);
   }
 
