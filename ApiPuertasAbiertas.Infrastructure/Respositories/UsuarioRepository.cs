@@ -21,7 +21,9 @@ public class UsuarioRepository : IUsuarioRepository
 
   public async Task<List<Usuario>> ObtenerTodosAsync()
   {
-    return await _context.Usuarios.ToListAsync();
+    return await _context.Usuarios
+            .Include(u => u.Perfil)
+            .ToListAsync();
   }
 
   public async Task<Usuario?> ObtenerPorIdAsync(int id)
