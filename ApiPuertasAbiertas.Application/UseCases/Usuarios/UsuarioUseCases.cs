@@ -37,7 +37,6 @@ public class UsuarioUseCases
   {
     var usuario = await _usuarioRepository.ObtenerPorIdAsync(dto.Id);
     if (usuario == null) throw new KeyNotFoundException("Usuario no encontrado");
-    // Map only the fields that can be updated
 
     _mapper.Map(dto, usuario);
     await _usuarioRepository.ActualizarAsync(usuario);
