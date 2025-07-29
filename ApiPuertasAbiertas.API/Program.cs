@@ -29,6 +29,7 @@ builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddAutoMapper(typeof(UsuarioProfile));
+builder.Services.AddAutoMapper(typeof(PerfilProfile));
 
 
 builder.Services.AddResponseCompression(options =>

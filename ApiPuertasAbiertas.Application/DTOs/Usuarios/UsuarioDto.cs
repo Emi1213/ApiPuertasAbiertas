@@ -1,4 +1,4 @@
-using ApiPuertasAbiertas.Domain.Entities;
+using ApiPuertasAbiertas.Application.DTOs.Perfil;
 
 namespace ApiPuertasAbiertas.Application.DTOs.Usuarios;
 
@@ -8,6 +8,6 @@ public class UsuarioDto
   public required string Usuario { get; set; }
   public required string Nombre { get; set; }
   public required string Descripcion { get; set; }
-  public required Perfil Perfil { get; set; }
+  public required PerfilDto Perfil { get; set; }
 
 }
