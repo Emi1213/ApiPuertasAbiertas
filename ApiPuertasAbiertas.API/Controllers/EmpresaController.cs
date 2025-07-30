@@ -1,7 +1,9 @@
 using ApiPuertasAbiertas.Application.DTOs.Empresa;
 using ApiPuertasAbiertas.Application.UseCases.Empresas;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class EmpresaController : ControllerBase
@@ -16,7 +18,7 @@ public class EmpresaController : ControllerBase
   public async Task<object> ObtenerTodos()
   {
     var empresas = await _empresaUseCases.ObtenerTodosAsync();
-    return Results.Ok(empresas);
+    return Ok(empresas);
   }
   [HttpGet("{id}")]
   public async Task<object> ObtenerPorId(int id)
