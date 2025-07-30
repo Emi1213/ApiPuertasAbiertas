@@ -12,13 +12,13 @@ public static class ApiRespuestaFactory
     };
   }
 
-  public static ApiRespuesta<T> CrearError<T>(List<string> errores, string mensaje)
+  public static ApiRespuesta<T> CrearError<T>(string mensaje)
   {
     return new ApiRespuesta<T>
     {
       Exitoso = false,
       Mensaje = mensaje,
-      Errores = errores
+      Datos = default
     };
   }
 }

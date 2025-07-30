@@ -12,7 +12,17 @@ public class UsuarioProfile : Profile
         .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NombreUsuario))
         .ForMember(dest => dest.Descripcion, opt => opt.MapFrom(src => src.Descripcion ?? string.Empty))
         .ReverseMap();
-    CreateMap<Usuario, CrearUsuarioDto>().ReverseMap();
-    CreateMap<Usuario, ActualizarUsuarioDto>().ReverseMap();
+    CreateMap<CrearUsuarioDto, Usuario>()
+        .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.Usuario));
+
+    CreateMap<Usuario, CrearUsuarioDto>()
+        .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NombreUsuario));
+
+    // Para actualización
+    CreateMap<ActualizarUsuarioDto, Usuario>()
+        .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.Usuario));
+
+    CreateMap<Usuario, ActualizarUsuarioDto>()
+        .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NombreUsuario));
   }
 }

@@ -44,6 +44,8 @@ public class UsuarioUseCases
 
   public async Task EliminarAsync(int id)
   {
+    var usuario = await _usuarioRepository.ObtenerPorIdAsync(id);
+    if (usuario == null) throw new KeyNotFoundException("Usuario no encontrado");
     await _usuarioRepository.EliminarAsync(id);
   }
 }

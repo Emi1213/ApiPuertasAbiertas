@@ -1,7 +1,9 @@
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
 [ApiController]
 [Route("api/[controller]")]
 public class UsuarioController : ControllerBase
@@ -44,7 +46,7 @@ public class UsuarioController : ControllerBase
     try
     {
       await _usuarioUseCases.ActualizarAsync(dto);
-      return Results.NoContent();
+      return Results.Ok("Usuario actualizado exitosamente.");
     }
     catch (KeyNotFoundException)
     {
@@ -56,6 +58,6 @@ public class UsuarioController : ControllerBase
   public async Task<object> Eliminar(int id)
   {
     await _usuarioUseCases.EliminarAsync(id);
-    return NoContent();
+    return Results.Ok("Usuario eliminado exitosamente.");
   }
 }
