@@ -25,7 +25,7 @@ public class EmpresaController : ControllerBase
   {
     var empresa = await _empresaUseCases.ObtenerPorIdAsync(id);
     if (empresa == null)
-      throw new KeyNotFoundException("Empresa no encontrada.");
+      return Results.NotFound("Empresa no encontrada");
     return Results.Ok(empresa);
   }
   [HttpPost]

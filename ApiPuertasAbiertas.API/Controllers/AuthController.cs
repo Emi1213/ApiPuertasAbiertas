@@ -19,7 +19,7 @@ public class AuthController : ControllerBase
   {
     var resultado = await _loginUseCase.ExecuteAsync(dto.Usuario, dto.Contrasenia);
     if (resultado == null)
-      return Results.Unauthorized();
+      return Results.BadRequest("Credenciales inválidas");
 
     return Results.Ok(resultado);
   }
