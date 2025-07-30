@@ -24,7 +24,7 @@ public class EmpresaUseCases
     var empresa = await _empresaRepository.ObtenerPorIdAsync(id);
     return empresa == null ? null : _mapper.Map<EmpresaDto>(empresa);
   }
-  public async Task CrearAsync(EmpresaDto empresaDto)
+  public async Task CrearAsync(CrearEmpresaDto empresaDto)
   {
     var empresa = _mapper.Map<Domain.Entities.Empresa>(empresaDto);
     await _empresaRepository.CrearAsync(empresa);
@@ -36,6 +36,9 @@ public class EmpresaUseCases
   }
   public async Task EliminarAsync(int id)
   {
+    var empresa = await _empresaRepository.ObtenerPorIdAsync(id);
+    if (empresa == null) throw new KeyNotFoundException("Empresa no encontrada");
+
     await _empresaRepository.EliminarAsync(id);
   }
   public async Task<EmpresaDto?> BuscarPorNombreAsync(string nombre)

@@ -29,7 +29,7 @@ public class EmpresaController : ControllerBase
     return Results.Ok(empresa);
   }
   [HttpPost]
-  public async Task<object> Crear([FromBody] EmpresaDto dto)
+  public async Task<object> Crear([FromBody] CrearEmpresaDto dto)
   {
     await _empresaUseCases.CrearAsync(dto);
     return Results.Ok("Empresa creada exitosamente.");

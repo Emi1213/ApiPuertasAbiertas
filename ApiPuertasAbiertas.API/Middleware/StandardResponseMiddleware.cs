@@ -1,11 +1,14 @@
+using System.Text;
 using System.Text.Json;
 using ApiPuertasAbiertas.Shared.Responses;
+
 namespace ApiPuertasAbiertas.API.Middleware;
 
 public class StandardResponseMiddleware
 {
   private readonly RequestDelegate _next;
   private readonly ILogger<StandardResponseMiddleware> _logger;
+
   public StandardResponseMiddleware(RequestDelegate next, ILogger<StandardResponseMiddleware> logger)
   {
     _next = next;
@@ -29,28 +32,47 @@ public class StandardResponseMiddleware
         var bodyText = await new StreamReader(newBody).ReadToEndAsync();
 
         object? originalData = null;
+        string? mensaje = null;
+
         try
         {
-          originalData = JsonSerializer.Deserialize<object>(bodyText, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+          if (bodyText.StartsWith("\"") && bodyText.EndsWith("\""))
+          {
+            mensaje = JsonSerializer.Deserialize<string>(bodyText);
+          }
+          else
+          {
+            originalData = JsonSerializer.Deserialize<object>(bodyText, new JsonSerializerOptions
+            {
+              PropertyNameCaseInsensitive = true
+            });
+          }
         }
-        catch { }
-
-        var wrapped = JsonSerializer.Serialize(new ApiRespuesta<object>
+        catch
         {
-          Exitoso = context.Response.StatusCode >= 200 && context.Response.StatusCode < 300,
-          Mensaje = context.Response.StatusCode switch
+          mensaje = bodyText;
+        }
+
+        var response = new ApiRespuesta<object>
+        {
+          Exitoso = context.Response.StatusCode is >= 200 and < 300,
+          Mensaje = mensaje ?? context.Response.StatusCode switch
           {
             200 => "Operación exitosa",
             400 => "Solicitud incorrecta",
             401 => "No autorizado",
+            403 => "Prohibido",
+            404 => "No encontrado",
             500 => "Error interno",
             _ => "Resultado"
           },
           Datos = originalData
-        });
+        };
+
+        var wrapped = JsonSerializer.Serialize(response);
 
         context.Response.Body = originalBody;
-        context.Response.ContentLength = System.Text.Encoding.UTF8.GetByteCount(wrapped);
+        context.Response.ContentLength = Encoding.UTF8.GetByteCount(wrapped);
         await context.Response.WriteAsync(wrapped);
       }
       else
@@ -69,7 +91,7 @@ public class StandardResponseMiddleware
       {
         Exitoso = false,
         Mensaje = ex.Message,
-        Errores = new List<string> { ex.Message }
+        Datos = null
       });
 
       await context.Response.WriteAsync(error);
