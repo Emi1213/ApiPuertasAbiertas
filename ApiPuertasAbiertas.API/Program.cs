@@ -14,6 +14,7 @@ using ApiPuertasAbiertas.Application.Profiles;
 using Microsoft.AspNetCore.Mvc;
 using ApiPuertasAbiertas.Shared.Responses;
 using ApiPuertasAbiertas.Application.UseCases.Empresas;
+using ApiPuertasAbiertas.Application.UseCases.Personal;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -25,8 +26,11 @@ builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
 builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
+builder.Services.AddScoped<PersonalUseCases>();
+builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
+
 
 builder.Services.AddControllers();
 

@@ -21,8 +21,13 @@ public class PersonalConfiguration : IEntityTypeConfiguration<Personal>
         .IsRequired()
         .HasDefaultValue(true);
 
+    builder.Property(p => p.EmpresaId)
+        .HasColumnName("Id_Empresa")
+        .IsRequired();
+
     builder.HasOne(p => p.Empresa)
         .WithMany(e => e.Personal)
-        .HasForeignKey(p => p.EmpresaId);
+        .HasForeignKey(p => p.EmpresaId)
+        .OnDelete(DeleteBehavior.Cascade);
   }
 }
