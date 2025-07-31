@@ -76,6 +76,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(UsuarioProfile));
 builder.Services.AddAutoMapper(typeof(PerfilProfile));
+builder.Services.AddAutoMapper(typeof(EmpresaProfile));
+builder.Services.AddAutoMapper(typeof(PersonalProfile));
 
 
 builder.Services.AddResponseCompression(options =>

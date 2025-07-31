@@ -1,5 +1,4 @@
 using ApiPuertasAbiertas.Application.DTOs.Auth;
-using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Application.UseCases.Auth;
 using Microsoft.AspNetCore.Mvc;
 
@@ -15,13 +14,13 @@ public class AuthController : ControllerBase
   }
 
   [HttpPost("login")]
-  public async Task<object> Login([FromBody] LoginDto dto)
+  public async Task<IActionResult> Login([FromBody] LoginDto dto)
   {
     var resultado = await _loginUseCase.ExecuteAsync(dto.Usuario, dto.Contrasenia);
     if (resultado == null)
-      return Results.BadRequest("Credenciales inválidas");
+      return BadRequest("Credenciales inválidas");
 
-    return Results.Ok(resultado);
+    return Ok(resultado);
   }
 
 }

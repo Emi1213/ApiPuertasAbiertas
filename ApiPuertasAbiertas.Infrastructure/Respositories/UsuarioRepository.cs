@@ -15,8 +15,8 @@ public class UsuarioRepository : IUsuarioRepository
   }
   public async Task<Usuario?> BuscarPorCredencialesAsync(string usuario, string contrasenia)
   {
-    return await _context.Usuarios
-      .FirstOrDefaultAsync(u => u.NombreUsuario == usuario && u.Contrasenia == contrasenia);
+    return await _context.Usuarios.Include(u => u.Perfil)
+            .FirstOrDefaultAsync(u => u.NombreUsuario == usuario && u.Contrasenia == contrasenia);
   }
 
   public async Task<List<Usuario>> ObtenerTodosAsync()
