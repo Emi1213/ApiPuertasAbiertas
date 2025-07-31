@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/empresas")]
 public class EmpresaController : ControllerBase
 {
   private readonly EmpresaUseCases _empresaUseCases;
