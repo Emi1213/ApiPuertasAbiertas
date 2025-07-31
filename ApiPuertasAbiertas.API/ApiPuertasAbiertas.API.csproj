@@ -7,12 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="8.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.3" />
+    <PackageReference Include="Microsoft.IdentityModel.Tokens" Version="7.1.2" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="7.1.2" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\ApiPuertasAbiertas.Application\ApiPuertasAbiertas.Application.csproj" />
+    <ProjectReference Include="..\ApiPuertasAbiertas.Infrastructure\ApiPuertasAbiertas.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
