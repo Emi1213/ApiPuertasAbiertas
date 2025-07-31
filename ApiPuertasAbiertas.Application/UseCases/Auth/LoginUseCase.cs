@@ -15,21 +15,21 @@ public class LoginUseCase
     _usuarioRepository = usuarioRepository;
   }
 
-  public async Task<AuthResponseDto?> ExecuteAsync(string usuario, string contrasenia)
+  public async Task<LoginResponseDto?> ExecuteAsync(string usuario, string contrasenia)
   {
     var usuarioEncontrado = await _usuarioRepository.BuscarPorCredencialesAsync(usuario, contrasenia);
-    
+
     if (usuarioEncontrado == null)
     {
-      return null; 
+      return null;
     }
 
     var token = _servicioAuth.GenerarToken(usuarioEncontrado);
-    
-    return new AuthResponseDto
+
+    return new LoginResponseDto
     {
       Token = token,
-      Expiracion = DateTime.UtcNow.AddHours(1) 
+      Expiracion = DateTime.UtcNow.AddHours(1)
     };
   }
 }

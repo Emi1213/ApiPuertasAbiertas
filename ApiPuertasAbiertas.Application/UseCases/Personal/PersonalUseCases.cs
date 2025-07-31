@@ -17,8 +17,8 @@ namespace ApiPuertasAbiertas.Application.UseCases.Personal
 
     public async Task<List<PersonalDto>> ObtenerTodosAsync()
     {
-      var personalList = await _personalRepository.ObtenerTodosAsync();
-      return _mapper.Map<List<PersonalDto>>(personalList);
+      var personal = await _personalRepository.ObtenerTodosAsync();
+      return _mapper.Map<List<PersonalDto>>(personal);
     }
     public async Task<PersonalDto?> ObtenerPorIdAsync(int id)
     {
