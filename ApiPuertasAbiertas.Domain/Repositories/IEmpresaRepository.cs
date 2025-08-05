@@ -10,4 +10,6 @@ public interface IEmpresaRepository
   Task CrearAsync(Empresa empresa);
   Task ActualizarAsync(Empresa empresa);
   Task EliminarAsync(int id);
+  Task<(int total, List<Empresa>)> BuscarAsync(string? nombre, bool? estado, int pagina, int tamanioPagina);
+
 }
