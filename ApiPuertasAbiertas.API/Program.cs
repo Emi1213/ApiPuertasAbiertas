@@ -26,6 +26,7 @@ builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
 builder.Services.AddScoped<BuscarEmpresasUseCase>();
+builder.Services.AddScoped<BuscarUsuariosUseCases>();
 builder.Services.AddScoped<PerfilUseCases>();
 builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
 builder.Services.AddScoped<PersonalUseCases>();

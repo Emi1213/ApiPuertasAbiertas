@@ -2,16 +2,19 @@ using ApiPuertasAbiertas.Application.DTOs.Empresa;
 using ApiPuertasAbiertas.Domain.Entities;
 using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Shared.Responses;
+using AutoMapper;
 
 namespace ApiPuertasAbiertas.Application.UseCases.Empresas;
 
 public class BuscarEmpresasUseCase
 {
   private readonly IEmpresaRepository _repository;
+  private readonly IMapper _mapper;
 
-  public BuscarEmpresasUseCase(IEmpresaRepository repository)
+  public BuscarEmpresasUseCase(IEmpresaRepository repository, IMapper mapper)
   {
     _repository = repository;
+    _mapper = mapper;
   }
 
   public async Task<RespuestaPaginada<EmpresaDto>> ExecuteAsync(BuscarEmpresasQuery query)
@@ -23,12 +26,7 @@ public class BuscarEmpresasUseCase
       query.tamanioPagina
     );
 
-    var items = empresas.Select(e => new EmpresaDto
-    {
-      Id = e.Id,
-      Nombre = e.Nombre,
-      Estado = e.Estado
-    }).ToList();
+    var items = _mapper.Map<List<EmpresaDto>>(empresas);
 
     return new RespuestaPaginada<EmpresaDto>
     {
