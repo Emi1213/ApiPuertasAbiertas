@@ -69,7 +69,11 @@ public class StandardResponseMiddleware
           Datos = originalData
         };
 
-        var wrapped = JsonSerializer.Serialize(response);
+        var wrapped = JsonSerializer.Serialize(response, new JsonSerializerOptions
+        {
+          PropertyNamingPolicy = JsonNamingPolicy.CamelCase
+        });
+
 
         context.Response.Body = originalBody;
         context.Response.ContentLength = Encoding.UTF8.GetByteCount(wrapped);
@@ -92,7 +96,11 @@ public class StandardResponseMiddleware
         Exitoso = false,
         Mensaje = ex.Message,
         Datos = null
+      }, new JsonSerializerOptions
+      {
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
       });
+
 
       await context.Response.WriteAsync(error);
     }

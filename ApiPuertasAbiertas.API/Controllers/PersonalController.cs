@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/personal")]
 public class PersonalController : ControllerBase
 {
   private readonly PersonalUseCases _personalUseCases;

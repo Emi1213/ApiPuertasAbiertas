@@ -22,9 +22,10 @@ public class ServicioAuth : IServicioAuth
   {
     var claims = new[]
     {
+      new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
       new Claim(ClaimTypes.Name, usuario.NombreUsuario),
+      new Claim(ClaimTypes.Role, usuario.Perfil.Nombre.ToString()),
     };
-
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 

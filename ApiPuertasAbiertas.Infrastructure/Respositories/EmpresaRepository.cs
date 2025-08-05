@@ -42,6 +42,27 @@ public class EmpresaRepository : IEmpresaRepository
     await _context.SaveChangesAsync();
   }
 
+  public async Task<(int total, List<Empresa>)> BuscarAsync(string? nombre, bool? estado, int pagina, int tamanioPagina)
+{
+  var query = _context.Empresas.AsQueryable();
+
+  if (!string.IsNullOrWhiteSpace(nombre))
+    query = query.Where(e => e.Nombre.Contains(nombre));
+
+  if (estado.HasValue)
+    query = query.Where(e => e.Estado == estado.Value);
+
+  var total = await query.CountAsync();
+
+  var empresas = await query
+    .Skip((pagina - 1) * tamanioPagina)
+    .Take(tamanioPagina)
+    .ToListAsync();
+
+  return (total, empresas);
+}
+
+
   public async Task EliminarAsync(int id)
   {
     var empresa = await ObtenerPorIdAsync(id);

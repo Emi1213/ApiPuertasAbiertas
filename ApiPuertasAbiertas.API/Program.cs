@@ -26,6 +26,7 @@ builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
 builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
+builder.Services.AddScoped<BuscarEmpresasUseCase>();
 builder.Services.AddScoped<PersonalUseCases>();
 builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
@@ -76,6 +77,8 @@ builder.Services.AddCors(options =>
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddAutoMapper(typeof(UsuarioProfile));
 builder.Services.AddAutoMapper(typeof(PerfilProfile));
+builder.Services.AddAutoMapper(typeof(EmpresaProfile));
+builder.Services.AddAutoMapper(typeof(PersonalProfile));
 
 
 builder.Services.AddResponseCompression(options =>

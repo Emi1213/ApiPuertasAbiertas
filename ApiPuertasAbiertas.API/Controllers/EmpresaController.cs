@@ -1,18 +1,21 @@
 using ApiPuertasAbiertas.Application.DTOs.Empresa;
 using ApiPuertasAbiertas.Application.UseCases.Empresas;
+using ApiPuertasAbiertas.Shared.Responses;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 [Authorize]
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/empresas")]
 public class EmpresaController : ControllerBase
 {
   private readonly EmpresaUseCases _empresaUseCases;
+  private readonly BuscarEmpresasUseCase _buscarEmpresasUseCase;
 
-  public EmpresaController(EmpresaUseCases empresaUseCases)
+  public EmpresaController(EmpresaUseCases empresaUseCases, BuscarEmpresasUseCase buscarEmpresasUseCase)
   {
     _empresaUseCases = empresaUseCases;
+    _buscarEmpresasUseCase = buscarEmpresasUseCase;
   }
   [HttpGet]
   public async Task<object> ObtenerTodos()
@@ -28,12 +31,19 @@ public class EmpresaController : ControllerBase
       return Results.NotFound("Empresa no encontrada");
     return Results.Ok(empresa);
   }
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarEmpresasQuery query)
+  {
+    var resultado = await _buscarEmpresasUseCase.ExecuteAsync(query);
+    return Results.Ok(resultado);
+  }
   [HttpPost]
   public async Task<object> Crear([FromBody] CrearEmpresaDto dto)
   {
-    await _empresaUseCases.CrearAsync(dto);
-    return Results.Ok("Empresa creada exitosamente.");
+    var empresaCreada = await _empresaUseCases.CrearAsync(dto);
+    return Results.Ok(empresaCreada);
   }
+
   [HttpPut("{id}")]
   public async Task<object> Actualizar(int id, [FromBody] EmpresaDto dto)
   {
