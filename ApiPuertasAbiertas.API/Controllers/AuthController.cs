@@ -3,7 +3,7 @@ using ApiPuertasAbiertas.Application.UseCases.Auth;
 using Microsoft.AspNetCore.Mvc;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("api/auth")]
 public class AuthController : ControllerBase
 {
   private readonly LoginUseCase _loginUseCase;

@@ -24,10 +24,11 @@ public class EmpresaUseCases
     var empresa = await _empresaRepository.ObtenerPorIdAsync(id);
     return empresa == null ? null : _mapper.Map<EmpresaDto>(empresa);
   }
-  public async Task CrearAsync(CrearEmpresaDto empresaDto)
+  public async Task<EmpresaDto> CrearAsync(CrearEmpresaDto empresaDto)
   {
     var empresa = _mapper.Map<Domain.Entities.Empresa>(empresaDto);
     await _empresaRepository.CrearAsync(empresa);
+    return _mapper.Map<EmpresaDto>(empresa);
   }
   public async Task ActualizarAsync(EmpresaDto empresaDto)
   {

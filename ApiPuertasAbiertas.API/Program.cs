@@ -26,6 +26,7 @@ builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
 builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
+builder.Services.AddScoped<BuscarEmpresasUseCase>();
 builder.Services.AddScoped<PersonalUseCases>();
 builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
