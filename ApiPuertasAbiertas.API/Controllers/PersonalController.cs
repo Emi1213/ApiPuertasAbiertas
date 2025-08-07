@@ -14,32 +14,41 @@ public class PersonalController : ControllerBase
     _personalUseCases = personalUseCases;
   }
   [HttpGet]
-  public async Task<List<PersonalDto>> ObtenerTodosAsync()
+  public async Task<object> ObtenerTodos()
   {
-    return await _personalUseCases.ObtenerTodosAsync();
+    var personal = await _personalUseCases.ObtenerTodosAsync();
+    return Results.Ok(personal);
   }
 
   [HttpGet("{id}")]
-  public async Task<PersonalDto?> ObtenerPorIdAsync(int id)
+  public async Task<object> ObtenerPorId(int id)
   {
-    return await _personalUseCases.ObtenerPorIdAsync(id);
+    var personal = await _personalUseCases.ObtenerPorIdAsync(id);
+    if (personal == null)
+    {
+      return new KeyNotFoundException("Personal no encontrado.");
+    }
+    return Results.Ok(personal);
   }
 
-  // [HttpPost]
-  // public async Task CrearAsync(CrearPersonalDto crearPersonalDto)
-  // {
-  //   await _personalUseCases.CrearAsync(crearPersonalDto);
-  // }
+  [HttpPost]
+  public async Task<object> Crear([FromBody] CrearPersonalDto dto)
+  {
+    await _personalUseCases.CrearAsync(dto);
+    return Results.Ok("Personal creado exitosamente.");
+  }
 
-  // [HttpPut]
-  // public async Task ActualizarAsync(ActualizarPersonalDto actualizarPersonalDto)
-  // {
-  //   await _personalUseCases.ActualizarAsync(actualizarPersonalDto);
-  // }
+  [HttpPut]
+  public async Task<object> Actualizar([FromBody] ActualizarPersonalDto dto)
+  {
+    await _personalUseCases.ActualizarAsync(dto);
+    return Results.Ok("Personal actualizado exitosamente.");
+  }
 
   [HttpDelete("{id}")]
-  public async Task EliminarAsync(int id)
+  public async Task<object> Eliminar(int id)
   {
     await _personalUseCases.EliminarAsync(id);
+    return Results.Ok("Personal eliminado exitosamente.");
   }
 }

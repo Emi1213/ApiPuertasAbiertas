@@ -51,16 +51,9 @@ public class UsuarioController : ControllerBase
   public async Task<object> Actualizar(int id, [FromBody] ActualizarUsuarioDto dto)
   {
     if (id != dto.Id) return Results.BadRequest("El ID del usuario no coincide.");
+    await _usuarioUseCases.ActualizarAsync(dto);
+    return Results.Ok("Usuario actualizado exitosamente.");
 
-    try
-    {
-      await _usuarioUseCases.ActualizarAsync(dto);
-      return Results.Ok("Usuario actualizado exitosamente.");
-    }
-    catch (KeyNotFoundException)
-    {
-      return Results.NotFound();
-    }
   }
 
   [HttpDelete("{id}")]
