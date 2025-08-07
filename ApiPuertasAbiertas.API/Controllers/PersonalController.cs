@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 public class PersonalController : ControllerBase
 {
   private readonly PersonalUseCases _personalUseCases;
-  public PersonalController(PersonalUseCases personalUseCases)
+  private readonly BuscarPersonalUseCases _buscarPersonalUseCases;
+  public PersonalController(PersonalUseCases personalUseCases, BuscarPersonalUseCases buscarPersonalUseCases)
   {
     _personalUseCases = personalUseCases;
+    _buscarPersonalUseCases = buscarPersonalUseCases;
   }
   [HttpGet]
   public async Task<object> ObtenerTodos()
@@ -31,6 +33,13 @@ public class PersonalController : ControllerBase
     return Results.Ok(personal);
   }
 
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarPersonalQuery query)
+  {
+    var resultado = await _buscarPersonalUseCases.ExecuteAsync(query);
+    return Results.Ok(resultado);
+  }
+
   [HttpPost]
   public async Task<object> Crear([FromBody] CrearPersonalDto dto)
   {
@@ -38,9 +47,10 @@ public class PersonalController : ControllerBase
     return Results.Ok("Personal creado exitosamente.");
   }
 
-  [HttpPut]
-  public async Task<object> Actualizar([FromBody] ActualizarPersonalDto dto)
+  [HttpPut("{id}")]
+  public async Task<object> Actualizar(int id, [FromBody] ActualizarPersonalDto dto)
   {
+    dto.Id = id;
     await _personalUseCases.ActualizarAsync(dto);
     return Results.Ok("Personal actualizado exitosamente.");
   }

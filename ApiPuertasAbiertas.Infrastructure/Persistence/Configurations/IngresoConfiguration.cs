@@ -14,24 +14,25 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
         .IsRequired();
     builder.Property(i => i.FechaFin)
         .HasColumnName("Fecha_Fin");
-    builder.Property(i => i.LlamadaRealizada)
-        .HasColumnName("Llamada_Realizada")
-        .IsRequired()
-        .HasDefaultValue(false);
-    builder.Property(i => i.Duracion)
-          .HasColumnType("time");
+    builder.Property(i => i.Duracion);
 
     builder.Property(i => i.Comentario)
         .HasMaxLength(500);
 
-    builder.Property(i => i.CodigoMotivo)
+    builder.Property(i => i.IdMotivo)
         .HasMaxLength(50)
-        .HasColumnName("Codigo_Motivo");
+        .HasColumnName("Id_Motivo");
     builder.Property(i => i.TipoMotivo)
         .HasMaxLength(50)
         .HasColumnName("Tipo_Motivo");
     builder.Property(i => i.FechaRecon)
         .HasColumnName("Fecha_Recon");
+    builder.Property(i => i.Causa)
+        .HasMaxLength(200);
+    builder.Property(i => i.UsuarioRecon)
+        .HasColumnName("Usuario_Recon");
+    builder.Property(i => i.Estado)
+        .HasMaxLength(50);
     builder.HasOne(i => i.Personal)
         .WithMany(p => p.Ingresos)
         .HasForeignKey(i => i.PersonalId)
