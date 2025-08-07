@@ -52,4 +52,24 @@ public class UsuarioRepository : IUsuarioRepository
       await _context.SaveChangesAsync();
     }
   }
+
+  public async Task<(int total, List<Usuario>)> BuscarAsync(string? busqueda, int? perfilId, int pagina, int tamanioPagina)
+  {
+    var query = _context.Usuarios.AsQueryable();
+    if (!string.IsNullOrWhiteSpace(busqueda))
+    {
+      query = query.Where(u => u.NombreUsuario.Contains(busqueda) || u.Nombre.Contains(busqueda));
+    }
+    if (perfilId.HasValue)
+    {
+      query = query.Where(u => u.PerfilId == perfilId.Value);
+    }
+    var total = await query.CountAsync();
+    var usuarios = await query
+      .Include(u => u.Perfil)
+      .Skip((pagina - 1) * tamanioPagina)
+      .Take(tamanioPagina)
+      .ToListAsync();
+    return (total, usuarios);
+  }
 }
