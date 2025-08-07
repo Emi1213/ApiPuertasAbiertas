@@ -47,9 +47,10 @@ public class PersonalController : ControllerBase
     return Results.Ok("Personal creado exitosamente.");
   }
 
-  [HttpPut]
-  public async Task<object> Actualizar([FromBody] ActualizarPersonalDto dto)
+  [HttpPut("{id}")]
+  public async Task<object> Actualizar(int id, [FromBody] ActualizarPersonalDto dto)
   {
+    dto.Id = id;
     await _personalUseCases.ActualizarAsync(dto);
     return Results.Ok("Personal actualizado exitosamente.");
   }

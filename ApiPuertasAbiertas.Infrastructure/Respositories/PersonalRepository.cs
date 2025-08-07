@@ -78,4 +78,11 @@ public class PersonalRepository : IPersonalRepository
         .ToListAsync();
     return (total, personal);
   }
+
+  public async Task ActualizarEstadoPorEmpresaIdAsync(int empresaId, bool estado)
+  {
+    await _context.Personal
+        .Where(p => p.EmpresaId == empresaId)
+        .ExecuteUpdateAsync(p => p.SetProperty(x => x.Estado, estado));
+  }
 }

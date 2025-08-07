@@ -39,8 +39,8 @@ namespace ApiPuertasAbiertas.Application.UseCases.Personal
       {
         throw new KeyNotFoundException("Personal no encontrado");
       }
-      var personal = _mapper.Map<Domain.Entities.Personal>(actualizarPersonalDto);
-      await _personalRepository.ActualizarAsync(personal);
+      _mapper.Map(actualizarPersonalDto, existingPersonal);
+      await _personalRepository.ActualizarAsync(existingPersonal);
     }
 
     public async Task EliminarAsync(int id)

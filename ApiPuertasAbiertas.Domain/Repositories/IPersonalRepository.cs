@@ -9,6 +9,7 @@ public interface IPersonalRepository
   Task ActualizarAsync(Personal personal);
   Task EliminarAsync(int id);
   Task<List<Personal>> ObtenerPorEmpresaIdAsync(int empresaId);
+  Task ActualizarEstadoPorEmpresaIdAsync(int empresaId, bool estado);
 
   Task<(int total, List<Personal>)> BuscarAsync(string? busqueda, bool? estado, int pagina, int tamanioPagina);
 }

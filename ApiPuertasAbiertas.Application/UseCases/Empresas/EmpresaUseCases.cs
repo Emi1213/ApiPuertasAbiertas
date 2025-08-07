@@ -7,11 +7,13 @@ namespace ApiPuertasAbiertas.Application.UseCases.Empresas;
 public class EmpresaUseCases
 {
   private readonly IEmpresaRepository _empresaRepository;
+  private readonly IPersonalRepository _personalRepository;
   private readonly IMapper _mapper;
 
-  public EmpresaUseCases(IEmpresaRepository empresaRepository, IMapper mapper)
+  public EmpresaUseCases(IEmpresaRepository empresaRepository, IPersonalRepository personalRepository, IMapper mapper)
   {
     _empresaRepository = empresaRepository;
+    _personalRepository = personalRepository;
     _mapper = mapper;
   }
   public async Task<List<EmpresaDto>> ObtenerTodosAsync()
@@ -32,8 +34,20 @@ public class EmpresaUseCases
   }
   public async Task ActualizarAsync(EmpresaDto empresaDto)
   {
-    var empresa = _mapper.Map<Domain.Entities.Empresa>(empresaDto);
-    await _empresaRepository.ActualizarAsync(empresa);
+    var empresaExistente = await _empresaRepository.ObtenerPorIdAsync(empresaDto.Id);
+    if (empresaExistente == null)
+    {
+      throw new KeyNotFoundException("Empresa no encontrada");
+    }
+
+    bool empresaSeDesactiva = empresaExistente.Estado && !empresaDto.Estado;
+
+    _mapper.Map(empresaDto, empresaExistente);
+    await _empresaRepository.ActualizarAsync(empresaExistente);
+    if (empresaSeDesactiva)
+    {
+      await _personalRepository.ActualizarEstadoPorEmpresaIdAsync(empresaDto.Id, false);
+    }
   }
   public async Task EliminarAsync(int id)
   {
