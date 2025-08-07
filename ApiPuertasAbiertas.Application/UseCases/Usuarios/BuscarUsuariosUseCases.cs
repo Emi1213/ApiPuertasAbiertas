@@ -1,5 +1,4 @@
 using ApiPuertasAbiertas.Application.DTOs.Empresa;
-using ApiPuertasAbiertas.Application.DTOs.Perfil;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Domain.Entities;
 using ApiPuertasAbiertas.Domain.Repositories;
