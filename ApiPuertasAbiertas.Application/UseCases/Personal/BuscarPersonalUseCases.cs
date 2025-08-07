@@ -1,11 +1,11 @@
 
 using ApiPuertasAbiertas.Domain.Repositories;
-using ApiPuertasAbiertas.Domain.Entities;
 using ApiPuertasAbiertas.Shared.Responses;
 using AutoMapper;
 using ApiPuertasAbiertas.Application.DTOs.Personal;
+using ApiPuertasAbiertas.Domain.Entities;
 
-namespace ApiPuertasAbiertas.Application.UseCases.PersonaL;
+namespace ApiPuertasAbiertas.Application.UseCases.Personal;
 
 public class BuscarPersonalUseCases
 {
@@ -19,7 +19,7 @@ public class BuscarPersonalUseCases
 
   public async Task<RespuestaPaginada<PersonalDto>> ExecuteAsync(BuscarPersonalQuery query)
   {
-    (int total, List<Personal> personal) = await _repository.BuscarAsync(
+    (int total, List<ApiPuertasAbiertas.Domain.Entities.Personal> personal) = await _repository.BuscarAsync(
       query.busqueda,
       query.estado,
       query.pagina,

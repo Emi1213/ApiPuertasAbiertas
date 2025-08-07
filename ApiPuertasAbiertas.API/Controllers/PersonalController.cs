@@ -9,9 +9,11 @@ using Microsoft.AspNetCore.Mvc;
 public class PersonalController : ControllerBase
 {
   private readonly PersonalUseCases _personalUseCases;
-  public PersonalController(PersonalUseCases personalUseCases)
+  private readonly BuscarPersonalUseCases _buscarPersonalUseCases;
+  public PersonalController(PersonalUseCases personalUseCases, BuscarPersonalUseCases buscarPersonalUseCases)
   {
     _personalUseCases = personalUseCases;
+    _buscarPersonalUseCases = buscarPersonalUseCases;
   }
   [HttpGet]
   public async Task<object> ObtenerTodos()
@@ -29,6 +31,13 @@ public class PersonalController : ControllerBase
       return new KeyNotFoundException("Personal no encontrado.");
     }
     return Results.Ok(personal);
+  }
+
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarPersonalQuery query)
+  {
+    var resultado = await _buscarPersonalUseCases.ExecuteAsync(query);
+    return Results.Ok(resultado);
   }
 
   [HttpPost]

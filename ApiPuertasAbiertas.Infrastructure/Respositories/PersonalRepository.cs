@@ -24,7 +24,9 @@ public class PersonalRepository : IPersonalRepository
 
   public async Task<Personal?> ObtenerPorIdAsync(int id)
   {
-    return await _context.Personal.FindAsync(id);
+    return await _context.Personal
+            .Include(p => p.Empresa)
+            .FirstOrDefaultAsync(p => p.Id == id);
   }
 
   public async Task CrearAsync(Personal personal)
@@ -52,6 +54,7 @@ public class PersonalRepository : IPersonalRepository
   public async Task<List<Personal>> ObtenerPorEmpresaIdAsync(int empresaId)
   {
     return await _context.Personal
+            .Include(p => p.Empresa)
             .Where(p => p.EmpresaId == empresaId)
             .ToListAsync();
   }
