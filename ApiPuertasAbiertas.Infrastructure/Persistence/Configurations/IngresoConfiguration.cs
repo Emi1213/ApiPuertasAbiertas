@@ -39,9 +39,8 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
         .HasColumnName("Causa")
         .HasMaxLength(250);
 
-    builder.Property(i => i.UsuarioRecon)
-        .HasColumnName("Usuario_Recon")
-        .HasMaxLength(100);
+    builder.Property(i => i.UsuarioReconId)
+        .HasColumnName("Id_Usuario");
 
     builder.Property(i => i.Estado)
         .HasColumnName("Estado")
@@ -55,5 +54,10 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
         .WithMany(p => p.Ingresos)
         .HasForeignKey(i => i.PersonalId)
         .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasOne(i => i.UsuarioRecon)
+        .WithMany(u => u.IngresosReconocidos)
+        .HasForeignKey(i => i.UsuarioReconId)
+        .OnDelete(DeleteBehavior.SetNull);
   }
 }

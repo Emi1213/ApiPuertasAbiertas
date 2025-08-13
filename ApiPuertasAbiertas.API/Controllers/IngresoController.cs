@@ -2,6 +2,7 @@ using ApiPuertasAbiertas.Application.DTOs.Ingresos;
 using ApiPuertasAbiertas.Application.UseCases.Ingresos;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace ApiPuertasAbiertas.API.Controllers;
 
@@ -54,8 +55,15 @@ public class IngresoController : ControllerBase
   [HttpPost]
   public async Task<object> Crear([FromBody] CrearIngresoDto dto)
   {
-    await _ingresoUseCases.CrearAsync(dto);
-    return Results.Ok("Ingreso creado exitosamente.");
+    // Obtener el ID del usuario del token
+    var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+    if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int usuarioId))
+    {
+      return BadRequest("Token de usuario inválido");
+    }
+
+    var ingresoCreado = await _ingresoUseCases.CrearAsync(dto, usuarioId);
+    return Ok(ingresoCreado);
   }
 
   [HttpPut("{id}")]

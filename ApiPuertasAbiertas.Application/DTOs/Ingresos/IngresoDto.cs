@@ -1,4 +1,5 @@
 using ApiPuertasAbiertas.Application.DTOs.Personal;
+using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 
 namespace ApiPuertasAbiertas.Application.DTOs.Ingresos;
 
@@ -13,7 +14,8 @@ public class IngresoDto
   public string? TipoMotivo { get; set; }
   public string? Causa { get; set; }
   public DateTime? FechaRecon { get; set; }
-  public string? UsuarioRecon { get; set; }
-  public required string Estado { get; set; } = "En proceso";
+  public int? UsuarioReconId { get; set; }
+  public UsuarioDto? UsuarioRecon { get; set; }
+  public string Estado { get; set; } = "En proceso";
   public PersonalDto? Personal { get; set; }
 }

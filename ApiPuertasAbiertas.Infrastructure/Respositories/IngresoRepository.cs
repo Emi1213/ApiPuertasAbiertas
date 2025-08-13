@@ -19,6 +19,7 @@ public class IngresoRepository : IIngresoRepository
     return await _context.Ingresos
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
+      .Include(i => i.UsuarioRecon)
       .ToListAsync();
   }
 
@@ -27,6 +28,7 @@ public class IngresoRepository : IIngresoRepository
     return await _context.Ingresos
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
+      .Include(i => i.UsuarioRecon)
       .FirstOrDefaultAsync(i => i.Id == id);
   }
 
@@ -57,11 +59,12 @@ public class IngresoRepository : IIngresoRepository
     return await _context.Ingresos
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
+      .Include(i => i.UsuarioRecon)
       .Where(i => i.PersonalId == personalId)
       .ToListAsync();
   }
 
-  public async Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, int pagina, int tamanioPagina)
+  public async Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, string? estado, int pagina, int tamanioPagina)
   {
     var query = _context.Ingresos.AsQueryable();
 
@@ -73,14 +76,47 @@ public class IngresoRepository : IIngresoRepository
                               (i.Personal != null && i.Personal.Apellidos.Contains(busqueda)));
     }
 
+    if (!string.IsNullOrWhiteSpace(estado))
+    {
+      query = query.Where(i => i.Estado == estado);
+    }
+
     var total = await query.CountAsync();
     var ingresos = await query
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
+      .Include(i => i.UsuarioRecon)
       .Skip((pagina - 1) * tamanioPagina)
       .Take(tamanioPagina)
       .ToListAsync();
 
     return (total, ingresos);
+  }
+
+  public async Task<bool> ReconocerAsync(int id, int usuarioId, DateTime fechaUtc)
+  {
+    var usuarioExiste = await _context.Usuarios.AnyAsync(u => u.Id == usuarioId);
+    if (!usuarioExiste)
+      return false;
+    var filas = await _context.Ingresos
+      .Where(i => i.Id == id && i.FechaRecon == null)
+      .ExecuteUpdateAsync(setters => setters
+        .SetProperty(i => i.FechaRecon, fechaUtc)
+        .SetProperty(i => i.UsuarioReconId, usuarioId)
+      );
+
+    return filas > 0;
+  }
+
+  public async Task<bool> QuitarReconocimientoAsync(int id)
+  {
+    var filas = await _context.Ingresos
+      .Where(i => i.Id == id && i.FechaRecon != null)
+      .ExecuteUpdateAsync(setters => setters
+        .SetProperty(i => i.FechaRecon, (DateTime?)null)
+        .SetProperty(i => i.UsuarioReconId, (int?)null)
+      );
+
+    return filas > 0;
   }
 }

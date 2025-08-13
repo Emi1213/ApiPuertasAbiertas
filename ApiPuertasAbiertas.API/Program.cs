@@ -35,6 +35,8 @@ builder.Services.AddScoped<BuscarIngresosUseCases>();
 builder.Services.AddScoped<PerfilUseCases>();
 builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
 builder.Services.AddScoped<PersonalUseCases>();
+builder.Services.AddScoped<ReconocerIngresoUseCase>();
+builder.Services.AddSingleton<IClock, EcuadorClock>();
 builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();

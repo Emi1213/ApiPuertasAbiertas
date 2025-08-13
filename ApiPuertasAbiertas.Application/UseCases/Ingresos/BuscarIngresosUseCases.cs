@@ -19,7 +19,11 @@ public class BuscarIngresosUseCases
 
   public async Task<RespuestaPaginada<IngresoDto>> ExecuteAsync(BuscarIngresosQuery query)
   {
-    (int total, List<Ingreso> ingresos) = await _ingresoRepository.BuscarAsync(query.busqueda, query.pagina, query.tamanioPagina);
+    (int total, List<Ingreso> ingresos) = await _ingresoRepository.BuscarAsync(
+      query.busqueda,
+      query.estado,
+      query.pagina,
+      query.tamanioPagina);
 
     var items = _mapper.Map<List<IngresoDto>>(ingresos);
 

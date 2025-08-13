@@ -11,7 +11,7 @@ public class ActualizarIngresoDto
   public string? TipoMotivo { get; set; }
   public string? Causa { get; set; }
   public DateTime? FechaRecon { get; set; }
-  public required string UsuarioRecon { get; set; }
-  public required string Estado { get; set; } = "En proceso";
+  public int? UsuarioReconId { get; set; }
+  public string Estado { get; set; } = "En proceso";
   public int PersonalId { get; set; }
 }

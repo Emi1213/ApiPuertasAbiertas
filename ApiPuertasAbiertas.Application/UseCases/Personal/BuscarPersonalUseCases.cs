@@ -22,6 +22,7 @@ public class BuscarPersonalUseCases
     (int total, List<ApiPuertasAbiertas.Domain.Entities.Personal> personal) = await _repository.BuscarAsync(
       query.busqueda,
       query.estado,
+      query.empresaId,
       query.pagina,
       query.tamanioPagina
     );

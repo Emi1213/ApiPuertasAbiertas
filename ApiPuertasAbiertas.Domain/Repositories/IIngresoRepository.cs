@@ -10,5 +10,7 @@ public interface IIngresoRepository
   Task ActualizarAsync(Ingreso ingreso);
   Task EliminarAsync(int id);
   Task<List<Ingreso>> ObtenerPorPersonalIdAsync(int personalId);
-  Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, int pagina, int tamanioPagina);
+  Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, string? estado, int pagina, int tamanioPagina);
+  Task<bool> ReconocerAsync(int id, int usuario, DateTime fechaUtc);
+  Task<bool> QuitarReconocimientoAsync(int id);
 }

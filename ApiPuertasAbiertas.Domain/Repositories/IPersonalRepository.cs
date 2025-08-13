@@ -11,5 +11,5 @@ public interface IPersonalRepository
   Task<List<Personal>> ObtenerPorEmpresaIdAsync(int empresaId);
   Task ActualizarEstadoPorEmpresaIdAsync(int empresaId, bool estado);
 
-  Task<(int total, List<Personal>)> BuscarAsync(string? busqueda, bool? estado, int pagina, int tamanioPagina);
+  Task<(int total, List<Personal>)> BuscarAsync(string? busqueda, bool? estado, int? empresaId, int pagina, int tamanioPagina);
 }
