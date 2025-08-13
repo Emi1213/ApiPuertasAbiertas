@@ -2,6 +2,7 @@ namespace ApiPuertasAbiertas.Domain.Enums;
 
 public enum TipoMotivo
 {
-  Incidente = 1,
-  Cambio = 2
+  Incidencia = 1,
+  Cambio = 2,
+  Otro = 3
 }

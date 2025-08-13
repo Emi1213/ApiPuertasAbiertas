@@ -9,37 +9,56 @@ using Microsoft.AspNetCore.Mvc;
 public class PersonalController : ControllerBase
 {
   private readonly PersonalUseCases _personalUseCases;
-  public PersonalController(PersonalUseCases personalUseCases)
+  private readonly BuscarPersonalUseCases _buscarPersonalUseCases;
+  public PersonalController(PersonalUseCases personalUseCases, BuscarPersonalUseCases buscarPersonalUseCases)
   {
     _personalUseCases = personalUseCases;
+    _buscarPersonalUseCases = buscarPersonalUseCases;
   }
   [HttpGet]
-  public async Task<List<PersonalDto>> ObtenerTodosAsync()
+  public async Task<object> ObtenerTodos()
   {
-    return await _personalUseCases.ObtenerTodosAsync();
+    var personal = await _personalUseCases.ObtenerTodosAsync();
+    return Results.Ok(personal);
   }
 
   [HttpGet("{id}")]
-  public async Task<PersonalDto?> ObtenerPorIdAsync(int id)
+  public async Task<object> ObtenerPorId(int id)
   {
-    return await _personalUseCases.ObtenerPorIdAsync(id);
+    var personal = await _personalUseCases.ObtenerPorIdAsync(id);
+    if (personal == null)
+    {
+      return new KeyNotFoundException("Personal no encontrado.");
+    }
+    return Results.Ok(personal);
   }
 
-  // [HttpPost]
-  // public async Task CrearAsync(CrearPersonalDto crearPersonalDto)
-  // {
-  //   await _personalUseCases.CrearAsync(crearPersonalDto);
-  // }
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarPersonalQuery query)
+  {
+    var resultado = await _buscarPersonalUseCases.ExecuteAsync(query);
+    return Results.Ok(resultado);
+  }
 
-  // [HttpPut]
-  // public async Task ActualizarAsync(ActualizarPersonalDto actualizarPersonalDto)
-  // {
-  //   await _personalUseCases.ActualizarAsync(actualizarPersonalDto);
-  // }
+  [HttpPost]
+  public async Task<object> Crear([FromBody] CrearPersonalDto dto)
+  {
+    await _personalUseCases.CrearAsync(dto);
+    return Results.Ok("Personal creado exitosamente.");
+  }
+
+  [HttpPut("{id}")]
+  public async Task<object> Actualizar(int id, [FromBody] ActualizarPersonalDto dto)
+  {
+    dto.Id = id;
+    await _personalUseCases.ActualizarAsync(dto);
+    return Results.Ok("Personal actualizado exitosamente.");
+  }
 
   [HttpDelete("{id}")]
-  public async Task EliminarAsync(int id)
+  public async Task<object> Eliminar(int id)
   {
     await _personalUseCases.EliminarAsync(id);
+    return Results.Ok("Personal eliminado exitosamente.");
   }
 }

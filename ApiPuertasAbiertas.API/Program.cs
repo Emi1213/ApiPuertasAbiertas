@@ -11,10 +11,10 @@ using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Infrastructure.Repositories;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using ApiPuertasAbiertas.Application.Profiles;
-using Microsoft.AspNetCore.Mvc;
-using ApiPuertasAbiertas.Shared.Responses;
 using ApiPuertasAbiertas.Application.UseCases.Empresas;
 using ApiPuertasAbiertas.Application.UseCases.Personal;
+using ApiPuertasAbiertas.Application.UseCases.Perfiles;
+using ApiPuertasAbiertas.Application.UseCases.Ingresos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,10 +27,20 @@ builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
 builder.Services.AddScoped<BuscarEmpresasUseCase>();
+builder.Services.AddScoped<BuscarPersonalUseCases>();
+builder.Services.AddScoped<BuscarUsuariosUseCases>();
+builder.Services.AddScoped<IngresoUseCases>();
+builder.Services.AddScoped<BuscarIngresosUseCases>();
+
+builder.Services.AddScoped<PerfilUseCases>();
+builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
 builder.Services.AddScoped<PersonalUseCases>();
+builder.Services.AddScoped<ReconocerIngresoUseCase>();
+builder.Services.AddSingleton<IClock, EcuadorClock>();
 builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
+builder.Services.AddScoped<IIngresoRepository, IngresoRepository>();
 
 
 builder.Services.AddControllers();
@@ -39,7 +49,6 @@ builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new() { Title = "API Puertas Abiertas", Version = "v1" });
 
-  // 🔐 Configuración JWT
   c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
   {
     Name = "Authorization",
@@ -79,6 +88,7 @@ builder.Services.AddAutoMapper(typeof(UsuarioProfile));
 builder.Services.AddAutoMapper(typeof(PerfilProfile));
 builder.Services.AddAutoMapper(typeof(EmpresaProfile));
 builder.Services.AddAutoMapper(typeof(PersonalProfile));
+builder.Services.AddAutoMapper(typeof(IngresoProfile));
 
 
 builder.Services.AddResponseCompression(options =>

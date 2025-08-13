@@ -1,3 +1,4 @@
+using ApiPuertasAbiertas.Application.DTOs.Empresa;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using Microsoft.AspNetCore.Authorization;
@@ -9,10 +10,12 @@ using Microsoft.AspNetCore.Mvc;
 public class UsuarioController : ControllerBase
 {
   private readonly UsuarioUseCases _usuarioUseCases;
+  private readonly BuscarUsuariosUseCases _buscarUsuariosUseCases;
 
-  public UsuarioController(UsuarioUseCases usuarioUseCases)
+  public UsuarioController(UsuarioUseCases usuarioUseCases, BuscarUsuariosUseCases buscarUsuariosUseCases)
   {
     _usuarioUseCases = usuarioUseCases;
+    _buscarUsuariosUseCases = buscarUsuariosUseCases;
   }
 
   [HttpGet]
@@ -30,6 +33,12 @@ public class UsuarioController : ControllerBase
       throw new KeyNotFoundException("Usuario no encontrado.");
     return Results.Ok(usuario);
   }
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery query)
+  {
+    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(query);
+    return Results.Ok(resultado);
+  }
 
   [HttpPost]
   public async Task<object> Crear([FromBody] CrearUsuarioDto dto)
@@ -42,16 +51,9 @@ public class UsuarioController : ControllerBase
   public async Task<object> Actualizar(int id, [FromBody] ActualizarUsuarioDto dto)
   {
     if (id != dto.Id) return Results.BadRequest("El ID del usuario no coincide.");
+    await _usuarioUseCases.ActualizarAsync(dto);
+    return Results.Ok("Usuario actualizado exitosamente.");
 
-    try
-    {
-      await _usuarioUseCases.ActualizarAsync(dto);
-      return Results.Ok("Usuario actualizado exitosamente.");
-    }
-    catch (KeyNotFoundException)
-    {
-      return Results.NotFound();
-    }
   }
 
   [HttpDelete("{id}")]

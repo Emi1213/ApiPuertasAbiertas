@@ -1,34 +1,35 @@
 using ApiPuertasAbiertas.Application.DTOs.Empresa;
+using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Domain.Entities;
 using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Shared.Responses;
 using AutoMapper;
 
-namespace ApiPuertasAbiertas.Application.UseCases.Empresas;
+namespace ApiPuertasAbiertas.Application.UseCases.Usuarios;
 
-public class BuscarEmpresasUseCase
+public class BuscarUsuariosUseCases
 {
-  private readonly IEmpresaRepository _repository;
+  private readonly IUsuarioRepository _repository;
   private readonly IMapper _mapper;
 
-  public BuscarEmpresasUseCase(IEmpresaRepository repository, IMapper mapper)
+  public BuscarUsuariosUseCases(IUsuarioRepository repository, IMapper mapper)
   {
     _repository = repository;
     _mapper = mapper;
   }
 
-  public async Task<RespuestaPaginada<EmpresaDto>> ExecuteAsync(BuscarEmpresasQuery query)
+  public async Task<RespuestaPaginada<UsuarioDto>> ExecuteAsync(BuscarUsuariosQuery query)
   {
-    (int total, List<Empresa> empresas) = await _repository.BuscarAsync(
+    (int total, List<Usuario> usuarios) = await _repository.BuscarAsync(
       query.busqueda,
-      query.estado,
+      query.perfilId,
       query.pagina,
       query.tamanioPagina
     );
 
-    var items = _mapper.Map<List<EmpresaDto>>(empresas);
+    var items = _mapper.Map<List<UsuarioDto>>(usuarios);
 
-    return new RespuestaPaginada<EmpresaDto>
+    return new RespuestaPaginada<UsuarioDto>
     {
       Items = items,
       TotalItems = total,

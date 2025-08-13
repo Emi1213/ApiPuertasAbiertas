@@ -10,4 +10,5 @@ public interface IUsuarioRepository
   Task CrearAsync(Usuario usuario);
   Task ActualizarAsync(Usuario usuario);
   Task EliminarAsync(int id);
+  Task<(int total, List<Usuario>)> BuscarAsync(string? busqueda, int? perfilId, int pagina, int tamanioPagina);
 }

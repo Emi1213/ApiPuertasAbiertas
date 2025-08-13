@@ -8,7 +8,5 @@ public class PerfilProfile : Profile
     public PerfilProfile()
     {
         CreateMap<Perfil, PerfilDto>().ReverseMap();
-        // CreateMap<Perfil, CrearPerfilDto>().ReverseMap();
-        // CreateMap<Perfil, ActualizarPerfilDto>().ReverseMap();
     }
 }
