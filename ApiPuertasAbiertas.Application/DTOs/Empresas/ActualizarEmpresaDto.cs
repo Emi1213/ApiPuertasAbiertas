@@ -1,4 +1,4 @@
-namespace ApiPuertasAbiertas.Application.DTOs.Empresa;
+namespace ApiPuertasAbiertas.Application.DTOs.Empres;
 
 using System.ComponentModel.DataAnnotations;
 public class ActualizarEmpresaDto

@@ -59,9 +59,10 @@ public class PersonalRepository : IPersonalRepository
             .ToListAsync();
   }
 
-  public async Task<(int total, List<Personal>)> BuscarAsync(string? busqueda, bool? estado, int pagina, int tamanioPagina)
+  public async Task<(int total, List<Personal>)> BuscarAsync(string? busqueda, bool? estado, int? empresaId, int pagina, int tamanioPagina)
   {
     var query = _context.Personal.AsQueryable();
+
     if (!string.IsNullOrWhiteSpace(busqueda))
     {
       query = query.Where(p => p.Nombres.Contains(busqueda) || p.Apellidos.Contains(busqueda));
@@ -71,6 +72,12 @@ public class PersonalRepository : IPersonalRepository
     {
       query = query.Where(p => p.Estado == estado.Value);
     }
+
+    if (empresaId.HasValue)
+    {
+      query = query.Where(p => p.EmpresaId == empresaId.Value);
+    }
+
     var total = await query.CountAsync();
     var personal = await query.Include(p => p.Empresa)
         .Skip((pagina - 1) * tamanioPagina)

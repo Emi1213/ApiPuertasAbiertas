@@ -9,33 +9,55 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
   {
     builder.ToTable("Ingresos_tbl");
     builder.HasKey(i => i.Id);
+
     builder.Property(i => i.FechaInicio)
         .HasColumnName("Fecha_Inicio")
         .IsRequired();
+
     builder.Property(i => i.FechaFin)
         .HasColumnName("Fecha_Fin");
-    builder.Property(i => i.Duracion);
+
+    builder.Property(i => i.Duracion)
+        .HasColumnName("Duracion");
 
     builder.Property(i => i.Comentario)
+        .HasColumnName("Comentario")
         .HasMaxLength(500);
 
     builder.Property(i => i.IdMotivo)
-        .HasMaxLength(50)
-        .HasColumnName("Id_Motivo");
+        .HasColumnName("Id_Motivo")
+        .HasMaxLength(50);
+
     builder.Property(i => i.TipoMotivo)
-        .HasMaxLength(50)
-        .HasColumnName("Tipo_Motivo");
+        .HasColumnName("Tipo_Motivo")
+        .HasMaxLength(100);
+
     builder.Property(i => i.FechaRecon)
         .HasColumnName("Fecha_Recon");
+
     builder.Property(i => i.Causa)
-        .HasMaxLength(200);
-    builder.Property(i => i.UsuarioRecon)
-        .HasColumnName("Usuario_Recon");
+        .HasColumnName("Causa")
+        .HasMaxLength(250);
+
+    builder.Property(i => i.UsuarioReconId)
+        .HasColumnName("Id_Usuario");
+
     builder.Property(i => i.Estado)
-        .HasMaxLength(50);
+        .HasColumnName("Estado")
+        .HasMaxLength(20);
+
+    builder.Property(i => i.PersonalId)
+        .HasColumnName("Id_Personal")
+        .IsRequired();
+
     builder.HasOne(i => i.Personal)
         .WithMany(p => p.Ingresos)
         .HasForeignKey(i => i.PersonalId)
         .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasOne(i => i.UsuarioRecon)
+        .WithMany(u => u.IngresosReconocidos)
+        .HasForeignKey(i => i.UsuarioReconId)
+        .OnDelete(DeleteBehavior.SetNull);
   }
 }

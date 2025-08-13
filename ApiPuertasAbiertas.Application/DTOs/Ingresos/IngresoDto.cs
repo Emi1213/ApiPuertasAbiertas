@@ -1,6 +1,9 @@
-namespace ApiPuertasAbiertas.Domain.Entities;
+using ApiPuertasAbiertas.Application.DTOs.Personal;
+using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 
-public class Ingreso
+namespace ApiPuertasAbiertas.Application.DTOs.Ingresos;
+
+public class IngresoDto
 {
   public int Id { get; set; }
   public required DateTime FechaInicio { get; set; }
@@ -12,8 +15,7 @@ public class Ingreso
   public string? Causa { get; set; }
   public DateTime? FechaRecon { get; set; }
   public int? UsuarioReconId { get; set; }
-  public Usuario? UsuarioRecon { get; set; }
+  public UsuarioDto? UsuarioRecon { get; set; }
   public string Estado { get; set; } = "En proceso";
-  public int PersonalId { get; set; }
-  public Personal? Personal { get; set; }
+  public PersonalDto? Personal { get; set; }
 }

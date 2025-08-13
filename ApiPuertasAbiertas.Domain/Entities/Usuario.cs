@@ -9,4 +9,5 @@ public class Usuario
   public required string Contrasenia { get; set; }
   public int PerfilId { get; set; }
   public required Perfil Perfil { get; set; }
+  public ICollection<Ingreso> IngresosReconocidos { get; set; } = new List<Ingreso>();
 }
