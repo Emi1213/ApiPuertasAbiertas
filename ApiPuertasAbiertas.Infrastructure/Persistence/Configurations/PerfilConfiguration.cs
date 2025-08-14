@@ -20,5 +20,24 @@ public class PerfilConfiguration : IEntityTypeConfiguration<Perfil>
         .HasForeignKey(u => u.PerfilId)
         .OnDelete(DeleteBehavior.Cascade);
 
+    builder.HasMany(p => p.Modulos)
+        .WithMany(m => m.Perfiles)
+        .UsingEntity<ModuloPerfil>(
+          j => j.HasOne(mp => mp.Modulo)
+          .WithMany(m => m.ModulosPerfiles)
+          .HasForeignKey(mp => mp.ModuloId)
+          .OnDelete(DeleteBehavior.Cascade),
+          j => j.HasOne(mp => mp.Perfil)
+          .WithMany(p => p.ModulosPerfiles)
+          .HasForeignKey(mp => mp.PerfilId)
+          .OnDelete(DeleteBehavior.Cascade),
+          j =>
+          {
+            j.ToTable("Modulos_Perfiles_tbl");
+            j.HasKey(mp => mp.Id);
+            j.Property(mp => mp.ModuloId).HasColumnName("Id_Modulo");
+            j.Property(mp => mp.PerfilId).HasColumnName("Id_Perfil");
+            j.HasIndex(mp => new { mp.ModuloId, mp.PerfilId }).IsUnique();
+          });
   }
 }

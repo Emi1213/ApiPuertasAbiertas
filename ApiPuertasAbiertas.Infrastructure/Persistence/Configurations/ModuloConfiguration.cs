@@ -15,9 +15,8 @@ public class ModuloConfiguration : IEntityTypeConfiguration<Modulo>
     builder.Property(m => m.Nombre)
           .IsRequired()
           .HasMaxLength(100);
-    builder.Property(m => m.Descripcion)
-          .HasMaxLength(500);
-    
-    builder.HasMany
+    builder.Property(m => m.Alias)
+          .IsRequired()
+          .HasMaxLength(100);
   }
 }
