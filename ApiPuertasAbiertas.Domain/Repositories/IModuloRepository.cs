@@ -8,6 +8,5 @@ public interface IModuloRepository
 
   Task<Modulo?> ObtenerPorIdAsync(int id);
   Task CrearAsync(Modulo modulo);
-  Task ActualizarAsync(Modulo modulo);
   Task EliminarAsync(int id);
 }

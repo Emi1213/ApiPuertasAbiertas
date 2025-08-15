@@ -40,12 +40,6 @@ public class ModuloRepository : IModuloRepository
     await _context.SaveChangesAsync();
   }
 
-  public async Task ActualizarAsync(Modulo modulo)
-  {
-    _context.Modulos.Update(modulo);
-    await _context.SaveChangesAsync();
-  }
-
   public async Task EliminarAsync(int id)
   {
     var modulo = await ObtenerPorIdAsync(id);
