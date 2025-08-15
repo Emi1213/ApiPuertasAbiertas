@@ -15,6 +15,7 @@ using ApiPuertasAbiertas.Application.UseCases.Empresas;
 using ApiPuertasAbiertas.Application.UseCases.Personal;
 using ApiPuertasAbiertas.Application.UseCases.Perfiles;
 using ApiPuertasAbiertas.Application.UseCases.Ingresos;
+using ApiPuertasAbiertas.Application.UseCases.Modulos;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,7 +32,9 @@ builder.Services.AddScoped<BuscarPersonalUseCases>();
 builder.Services.AddScoped<BuscarUsuariosUseCases>();
 builder.Services.AddScoped<IngresoUseCases>();
 builder.Services.AddScoped<BuscarIngresosUseCases>();
-
+builder.Services.AddScoped<ModuloUseCases>();
+builder.Services.AddScoped<BuscarModulosUseCases>();
+builder.Services.AddScoped<IModuloRepository, ModuloRepository>();
 builder.Services.AddScoped<PerfilUseCases>();
 builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
 builder.Services.AddScoped<PersonalUseCases>();
