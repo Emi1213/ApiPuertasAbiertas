@@ -29,6 +29,7 @@ public class ModuloRepository : IModuloRepository
     return (total, modulos);
   }
 
+
   public async Task<Modulo?> ObtenerPorIdAsync(int id)
   {
     return await _context.Modulos.FindAsync(id);
@@ -49,4 +50,10 @@ public class ModuloRepository : IModuloRepository
       await _context.SaveChangesAsync();
     }
   }
+
+  public Task<List<Modulo>> ObtenerTodosAsync()
+  {
+    throw new NotImplementedException();
+  }
+
 }

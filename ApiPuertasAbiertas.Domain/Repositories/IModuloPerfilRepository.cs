@@ -6,6 +6,6 @@ public interface IModuloPerfilRepository
 {
   Task<List<ModuloPerfil>> ObtenerPorPerfilAsync(int perfilId);
   Task<ModuloPerfil?> ObtenerPorIdAsync(int id);
-  Task CrearAsync(int perfilId, int moduloId);
+  Task CrearAsync(ModuloPerfil moduloPerfil);
   Task EliminarAsync(int id);
 }
