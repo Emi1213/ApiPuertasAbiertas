@@ -24,7 +24,7 @@ public class ServicioAuth : IServicioAuth
     {
       new Claim(ClaimTypes.NameIdentifier, usuario.Id.ToString()),
       new Claim(ClaimTypes.Name, usuario.NombreUsuario),
-      new Claim(ClaimTypes.Role, usuario.Perfil.Nombre.ToString()),
+      new Claim(ClaimTypes.Role, usuario.Perfil.Id.ToString()),
     };
     var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JwtSettings:Key"]!));
     var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

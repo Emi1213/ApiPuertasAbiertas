@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using ApiPuertasAbiertas.Application.DTOs.Modulos;
 using ApiPuertasAbiertas.Application.DTOs.ModulosPerfil;
 using Microsoft.AspNetCore.Authorization;

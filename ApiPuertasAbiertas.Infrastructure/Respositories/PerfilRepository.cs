@@ -17,4 +17,9 @@ public class PerfilRepository : IPerfilRepository
   {
     return await _context.Perfiles.ToListAsync();
   }
+
+  public async Task<Perfil?> ObtenerPorIdAsync(int id)
+  {
+    return await _context.Perfiles.FindAsync(id);
+  }
 }
