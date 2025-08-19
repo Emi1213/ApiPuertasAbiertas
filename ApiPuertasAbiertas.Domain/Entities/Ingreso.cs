@@ -1,3 +1,5 @@
+using ApiPuertasAbiertas.Domain.Enums;
+
 namespace ApiPuertasAbiertas.Domain.Entities;
 
 public class Ingreso
@@ -13,7 +15,8 @@ public class Ingreso
   public DateTime? FechaRecon { get; set; }
   public int? UsuarioReconId { get; set; }
   public Usuario? UsuarioRecon { get; set; }
-  public string Estado { get; set; } = "En proceso";
+  public EstadoIngreso Estado { get; set; } = EstadoIngreso.EnProceso;
   public int PersonalId { get; set; }
   public Personal? Personal { get; set; }
+  public virtual ICollection<Alarma> Alarmas { get; set; } = new List<Alarma>();
 }

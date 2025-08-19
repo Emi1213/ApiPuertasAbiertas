@@ -1,6 +1,7 @@
 namespace ApiPuertasAbiertas.Infrastructure.Persistence.Configurations;
 
 using ApiPuertasAbiertas.Domain.Entities;
+using ApiPuertasAbiertas.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
@@ -42,9 +43,10 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
     builder.Property(i => i.UsuarioReconId)
         .HasColumnName("Id_Usuario");
 
+    // Configuración del enum como entero (más eficiente)
     builder.Property(i => i.Estado)
         .HasColumnName("Estado")
-        .HasMaxLength(20);
+        .HasConversion<int>();
 
     builder.Property(i => i.PersonalId)
         .HasColumnName("Id_Personal")

@@ -1,5 +1,8 @@
+using ApiPuertasAbiertas.Application.Converters;
 using ApiPuertasAbiertas.Application.DTOs.Personal;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
+using ApiPuertasAbiertas.Domain.Enums;
+using System.Text.Json.Serialization;
 
 namespace ApiPuertasAbiertas.Application.DTOs.Ingresos;
 
@@ -16,6 +19,10 @@ public class IngresoDto
   public DateTime? FechaRecon { get; set; }
   public int? UsuarioReconId { get; set; }
   public UsuarioDto? UsuarioRecon { get; set; }
-  public string Estado { get; set; } = "En proceso";
+
+  [JsonConverter(typeof(EstadoIngresoJsonConverter))]
+  public EstadoIngreso Estado { get; set; } = EstadoIngreso.EnProceso;
+
   public PersonalDto? Personal { get; set; }
+  public List<AlarmaDto> Alarmas { get; set; } = new List<AlarmaDto>();
 }

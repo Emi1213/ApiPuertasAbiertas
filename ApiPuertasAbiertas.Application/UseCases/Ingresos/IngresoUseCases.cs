@@ -1,5 +1,6 @@
 using ApiPuertasAbiertas.Application.DTOs.Ingresos;
 using ApiPuertasAbiertas.Application.Interfaces;
+using ApiPuertasAbiertas.Domain.Enums;
 using ApiPuertasAbiertas.Domain.Repositories;
 using AutoMapper;
 
@@ -49,12 +50,12 @@ public class IngresoUseCases
     {
       var duracion = ingreso.FechaFin.Value - ingreso.FechaInicio;
       ingreso.Duracion = $"{(int)duracion.TotalHours:D2}:{duracion.Minutes:D2}";
-      ingreso.Estado = "Completado";
+      ingreso.Estado = EstadoIngreso.Cerrado;
     }
     else
     {
       ingreso.Duracion = null;
-      ingreso.Estado = "En proceso";
+      ingreso.Estado = EstadoIngreso.EnProceso;
     }
 
     await _ingresoRepository.CrearAsync(ingreso);
@@ -80,12 +81,12 @@ public class IngresoUseCases
     {
       var duracion = ingresoExistente.FechaFin.Value - ingresoExistente.FechaInicio;
       ingresoExistente.Duracion = $"{(int)duracion.TotalHours:D2}:{duracion.Minutes:D2}";
-      ingresoExistente.Estado = "Completado";
+      ingresoExistente.Estado = EstadoIngreso.Cerrado;
     }
     else
     {
       ingresoExistente.Duracion = null;
-      ingresoExistente.Estado = "En proceso";
+      ingresoExistente.Estado = EstadoIngreso.EnProceso;
     }
 
     await _ingresoRepository.ActualizarAsync(ingresoExistente);
