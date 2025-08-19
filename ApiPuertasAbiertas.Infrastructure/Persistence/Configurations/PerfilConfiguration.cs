@@ -15,6 +15,11 @@ public class PerfilConfiguration : IEntityTypeConfiguration<Perfil>
     builder.Property(p => p.Descripcion)
         .HasMaxLength(500);
 
+    builder.Property(p => p.RbacVersion)
+      .HasColumnName("Rbac_Version")
+      .IsRequired()
+      .HasDefaultValue(1);
+
     builder.HasMany(p => p.Usuarios)
         .WithOne(u => u.Perfil)
         .HasForeignKey(u => u.PerfilId)

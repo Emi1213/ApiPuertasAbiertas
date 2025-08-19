@@ -1,5 +1,6 @@
 using ApiPuertasAbiertas.Application.DTOs.Modulos;
 using ApiPuertasAbiertas.Domain.Repositories;
+using ApiPuertasAbiertas.Shared.Interfaces;
 using AutoMapper;
 
 namespace ApiPuertasAbiertas.Application.DTOs.ModulosPerfil;
@@ -8,11 +9,16 @@ public class ModulosPerfilUseCases
 {
   private readonly IModuloPerfilRepository _moduloPerfilRepository;
   private readonly IMapper _mapper;
+  private readonly IRbacNotifier _notifier;
 
-  public ModulosPerfilUseCases(IModuloPerfilRepository moduloPerfilRepository, IMapper mapper)
+  public ModulosPerfilUseCases(
+        IModuloPerfilRepository moduloPerfilRepository,
+        IMapper mapper,
+        IRbacNotifier notifier)
   {
     _moduloPerfilRepository = moduloPerfilRepository;
     _mapper = mapper;
+    _notifier = notifier;
   }
 
   public async Task<List<ModuloDto>> ObtenerPorPerfilAsync(int perfilId)
@@ -23,19 +29,16 @@ public class ModulosPerfilUseCases
 
   public async Task AsignarModulosAsync(int perfilId, List<int> modulosIds)
   {
-    // Primero eliminamos todas las asignaciones existentes del perfil
     await _moduloPerfilRepository.EliminarPorPerfilAsync(perfilId);
-
-    // Luego asignamos los nuevos módulos
     if (modulosIds.Any())
     {
       await _moduloPerfilRepository.AsignarModulosAsync(perfilId, modulosIds);
     }
+    await _notifier.NotificarCambioModulosAsync(perfilId);
   }
 
   public async Task ActualizarModulosAsync(int perfilId, List<int> modulosIds)
   {
-    // Esta función es la misma que AsignarModulosAsync ya que reemplaza completamente los módulos
     await AsignarModulosAsync(perfilId, modulosIds);
   }
 }

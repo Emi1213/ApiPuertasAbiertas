@@ -58,12 +58,17 @@ public class ModuloPerfilRepository : IModuloPerfilRepository
     {
       PerfilId = perfilId,
       ModuloId = moduloId,
-      // Necesitamos cargar las entidades relacionadas, pero EF las manejará
       Modulo = null!,
       Perfil = null!
     }).ToList();
 
-    await _context.ModulosPerfiles.AddRangeAsync(modulosPerfiles);
+    if (modulosPerfiles.Count > 0)
+      await _context.ModulosPerfiles.AddRangeAsync(modulosPerfiles);
+
+    await _context.SaveChangesAsync();
+
+    var perfil = await _context.Perfiles.FirstAsync(p => p.Id == perfilId);
+    perfil.RbacVersion += 1;
     await _context.SaveChangesAsync();
   }
 

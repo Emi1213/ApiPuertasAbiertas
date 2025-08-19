@@ -17,6 +17,8 @@ using ApiPuertasAbiertas.Application.UseCases.Perfiles;
 using ApiPuertasAbiertas.Application.UseCases.Ingresos;
 using ApiPuertasAbiertas.Application.UseCases.Modulos;
 using ApiPuertasAbiertas.Application.DTOs.ModulosPerfil;
+using ApiPuertasAbiertas.API.Realtime;
+using ApiPuertasAbiertas.Shared.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -47,7 +49,8 @@ builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IIngresoRepository, IngresoRepository>();
-
+builder.Services.AddScoped<IRbacNotifier, RbacNotifier>();
+builder.Services.AddSignalR();
 
 builder.Services.AddControllers();
 
@@ -130,7 +133,7 @@ if (app.Environment.IsDevelopment())
   app.UseSwagger();
   app.UseSwaggerUI();
 }
-
+app.MapHub<RbacHub>("/hubs/rbac");
 app.UseResponseCompression();
 app.UseHttpsRedirection();
 app.UseCors("AllowAll");
