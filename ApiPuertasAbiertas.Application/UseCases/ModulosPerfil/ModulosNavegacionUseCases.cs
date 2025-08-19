@@ -2,7 +2,7 @@ using ApiPuertasAbiertas.Application.DTOs.Modulos;
 using ApiPuertasAbiertas.Domain.Repositories;
 using AutoMapper;
 
-namespace ApiPuertasAbiertas.Application.DTOs.ModulosPerfil;
+namespace ApiPuertasAbiertas.Application.UseCases.ModulosPerfil;
 
 public class ModulosNavegacionUseCases
 {

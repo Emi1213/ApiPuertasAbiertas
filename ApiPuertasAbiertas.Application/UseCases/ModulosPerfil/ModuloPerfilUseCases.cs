@@ -3,7 +3,7 @@ using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Shared.Interfaces;
 using AutoMapper;
 
-namespace ApiPuertasAbiertas.Application.DTOs.ModulosPerfil;
+namespace ApiPuertasAbiertas.Application.UseCases.ModulosPerfil;
 
 public class ModulosPerfilUseCases
 {
