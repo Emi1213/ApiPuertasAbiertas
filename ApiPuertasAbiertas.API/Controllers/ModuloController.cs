@@ -1,7 +1,11 @@
 using ApiPuertasAbiertas.Application.DTOs.Modulos;
 using ApiPuertasAbiertas.Application.UseCases.Modulos;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+[Authorize]
+[ApiController]
+[Route("api/modulos")]
 public class ModuloController : ControllerBase
 {
   private readonly ModuloUseCases _moduloUseCases;
@@ -18,6 +22,13 @@ public class ModuloController : ControllerBase
   {
     var resultado = await _buscarModulosUseCases.ExecuteAsync(query);
     return Results.Ok(resultado);
+  }
+
+  [HttpGet]
+  public async Task<object> ObtenerTodos()
+  {
+    var modulos = await _moduloUseCases.ObtenerTodosAsync();
+    return Results.Ok(modulos);
   }
 
   [HttpGet("{id}")]

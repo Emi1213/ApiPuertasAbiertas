@@ -29,6 +29,10 @@ public class ModuloRepository : IModuloRepository
     return (total, modulos);
   }
 
+  public async Task<List<Modulo>> ObtenerTodosAsync()
+  {
+    return await _context.Modulos.ToListAsync();
+  }
 
   public async Task<Modulo?> ObtenerPorIdAsync(int id)
   {
@@ -49,11 +53,6 @@ public class ModuloRepository : IModuloRepository
       _context.Modulos.Remove(modulo);
       await _context.SaveChangesAsync();
     }
-  }
-
-  public Task<List<Modulo>> ObtenerTodosAsync()
-  {
-    throw new NotImplementedException();
   }
 
 }

@@ -16,6 +16,12 @@ public class ModuloUseCases
     _mapper = mapper;
   }
 
+  public async Task<List<ModuloDto>> ObtenerTodosAsync()
+  {
+    var modulos = await _moduloRepository.ObtenerTodosAsync();
+    return _mapper.Map<List<ModuloDto>>(modulos);
+  }
+
   public async Task<ModuloDto?> ObtenerPorIdAsync(int id)
   {
     var modulo = await _moduloRepository.ObtenerPorIdAsync(id);
