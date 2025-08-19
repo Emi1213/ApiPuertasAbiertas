@@ -15,6 +15,10 @@ using ApiPuertasAbiertas.Application.UseCases.Empresas;
 using ApiPuertasAbiertas.Application.UseCases.Personal;
 using ApiPuertasAbiertas.Application.UseCases.Perfiles;
 using ApiPuertasAbiertas.Application.UseCases.Ingresos;
+using ApiPuertasAbiertas.Application.UseCases.Modulos;
+using ApiPuertasAbiertas.Application.UseCases.ModulosPerfil;
+using ApiPuertasAbiertas.API.Realtime;
+using ApiPuertasAbiertas.Shared.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -31,8 +35,14 @@ builder.Services.AddScoped<BuscarPersonalUseCases>();
 builder.Services.AddScoped<BuscarUsuariosUseCases>();
 builder.Services.AddScoped<IngresoUseCases>();
 builder.Services.AddScoped<BuscarIngresosUseCases>();
-
+builder.Services.AddScoped<ModuloUseCases>();
+builder.Services.AddScoped<BuscarModulosUseCases>();
+builder.Services.AddScoped<ModulosNavegacionUseCases>();
+builder.Services.AddScoped<IModuloRepository, ModuloRepository>();
+builder.Services.AddScoped<ModulosPerfilUseCases>();
+builder.Services.AddScoped<IModuloPerfilRepository, ModuloPerfilRepository>();
 builder.Services.AddScoped<PerfilUseCases>();
+builder.Services.AddScoped<BuscarPerfilesUseCases>();
 builder.Services.AddScoped<IPerfilRepository, PerfilRepository>();
 builder.Services.AddScoped<PersonalUseCases>();
 builder.Services.AddScoped<ReconocerIngresoUseCase>();
@@ -41,6 +51,8 @@ builder.Services.AddScoped<IPersonalRepository, PersonalRepository>();
 builder.Services.AddScoped<IUsuarioRepository, UsuarioRepository>();
 builder.Services.AddScoped<IEmpresaRepository, EmpresaRepository>();
 builder.Services.AddScoped<IIngresoRepository, IngresoRepository>();
+builder.Services.AddScoped<IRbacNotifier, RbacNotifier>();
+builder.Services.AddSignalR();
 
 
 builder.Services.AddControllers();

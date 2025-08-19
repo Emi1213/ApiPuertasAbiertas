@@ -8,6 +8,5 @@ public class UsuarioDto
   public required string Usuario { get; set; }
   public required string Nombre { get; set; }
   public required string Descripcion { get; set; }
-  public required PerfilDto Perfil { get; set; }
-
+  public PerfilDto? Perfil { get; set; }
 }

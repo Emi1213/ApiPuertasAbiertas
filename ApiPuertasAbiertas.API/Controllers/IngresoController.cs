@@ -55,7 +55,6 @@ public class IngresoController : ControllerBase
   [HttpPost]
   public async Task<object> Crear([FromBody] CrearIngresoDto dto)
   {
-    // Obtener el ID del usuario del token
     var userIdClaim = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
     if (string.IsNullOrEmpty(userIdClaim) || !int.TryParse(userIdClaim, out int usuarioId))
     {
