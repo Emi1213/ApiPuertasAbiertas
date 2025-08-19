@@ -19,4 +19,5 @@ public class PerfilUseCases
     var perfiles = await _perfilRepository.ObtenerTodosAsync();
     return _mapper.Map<List<PerfilDto>>(perfiles);
   }
+
 }

@@ -13,10 +13,11 @@ public class ModuloPerfilRepository : IModuloPerfilRepository
     _context = context;
   }
 
-  public async Task<List<ModuloPerfil>> ObtenerPorPerfilAsync(int perfilId)
+  public async Task<List<Modulo>> ObtenerPorPerfilAsync(int perfilId)
   {
     return await _context.ModulosPerfiles
         .Where(mp => mp.PerfilId == perfilId)
+        .Select(mp => mp.Modulo)
         .ToListAsync();
   }
 
@@ -39,6 +40,31 @@ public class ModuloPerfilRepository : IModuloPerfilRepository
       _context.ModulosPerfiles.Remove(moduloPerfil);
       await _context.SaveChangesAsync();
     }
+  }
+
+  public async Task EliminarPorPerfilAsync(int perfilId)
+  {
+    var modulosPerfiles = await _context.ModulosPerfiles
+        .Where(mp => mp.PerfilId == perfilId)
+        .ToListAsync();
+
+    _context.ModulosPerfiles.RemoveRange(modulosPerfiles);
+    await _context.SaveChangesAsync();
+  }
+
+  public async Task AsignarModulosAsync(int perfilId, List<int> modulosIds)
+  {
+    var modulosPerfiles = modulosIds.Select(moduloId => new ModuloPerfil
+    {
+      PerfilId = perfilId,
+      ModuloId = moduloId,
+      // Necesitamos cargar las entidades relacionadas, pero EF las manejará
+      Modulo = null!,
+      Perfil = null!
+    }).ToList();
+
+    await _context.ModulosPerfiles.AddRangeAsync(modulosPerfiles);
+    await _context.SaveChangesAsync();
   }
 
 
