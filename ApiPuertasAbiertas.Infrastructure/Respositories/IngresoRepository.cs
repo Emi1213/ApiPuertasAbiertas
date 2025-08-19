@@ -1,4 +1,5 @@
 using ApiPuertasAbiertas.Domain.Entities;
+using ApiPuertasAbiertas.Domain.Enums;
 using ApiPuertasAbiertas.Domain.Repositories;
 using ApiPuertasAbiertas.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ public class IngresoRepository : IIngresoRepository
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
       .Include(i => i.UsuarioRecon)
+      .Include(i => i.Alarmas)
       .ToListAsync();
   }
 
@@ -29,6 +31,7 @@ public class IngresoRepository : IIngresoRepository
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
       .Include(i => i.UsuarioRecon)
+      .Include(i => i.Alarmas)
       .FirstOrDefaultAsync(i => i.Id == id);
   }
 
@@ -60,11 +63,12 @@ public class IngresoRepository : IIngresoRepository
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
       .Include(i => i.UsuarioRecon)
+      .Include(i => i.Alarmas)
       .Where(i => i.PersonalId == personalId)
       .ToListAsync();
   }
 
-  public async Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, string? estado, int pagina, int tamanioPagina)
+  public async Task<(int total, List<Ingreso>)> BuscarAsync(string? busqueda, EstadoIngreso? estado, int pagina, int tamanioPagina)
   {
     var query = _context.Ingresos.AsQueryable();
 
@@ -76,9 +80,9 @@ public class IngresoRepository : IIngresoRepository
                               (i.Personal != null && i.Personal.Apellidos.Contains(busqueda)));
     }
 
-    if (!string.IsNullOrWhiteSpace(estado))
+    if (estado.HasValue)
     {
-      query = query.Where(i => i.Estado == estado);
+      query = query.Where(i => i.Estado == estado.Value);
     }
 
     var total = await query.CountAsync();
@@ -86,6 +90,7 @@ public class IngresoRepository : IIngresoRepository
       .Include(i => i.Personal)
         .ThenInclude(p => p!.Empresa)
       .Include(i => i.UsuarioRecon)
+      .Include(i => i.Alarmas)
       .Skip((pagina - 1) * tamanioPagina)
       .Take(tamanioPagina)
       .ToListAsync();
