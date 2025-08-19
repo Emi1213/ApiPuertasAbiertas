@@ -55,18 +55,22 @@ public class UsuarioRepository : IUsuarioRepository
 
   public async Task<(int total, List<Usuario>)> BuscarAsync(string? busqueda, int? perfilId, int pagina, int tamanioPagina)
   {
-    var query = _context.Usuarios.AsQueryable();
+    var query = _context.Usuarios.Include(u => u.Perfil).AsQueryable();
+
     if (!string.IsNullOrWhiteSpace(busqueda))
     {
       query = query.Where(u => u.NombreUsuario.Contains(busqueda) || u.Nombre.Contains(busqueda));
     }
-    if (perfilId.HasValue)
+
+    // Solo filtrar por perfilId si se especifica explícitamente y es mayor que 0
+    // Si no se especifica o es 0/null, devolver todos los usuarios (incluidos los sin perfil)
+    if (perfilId.HasValue && perfilId.Value > 0)
     {
       query = query.Where(u => u.PerfilId == perfilId.Value);
     }
+
     var total = await query.CountAsync();
     var usuarios = await query
-      .Include(u => u.Perfil)
       .Skip((pagina - 1) * tamanioPagina)
       .Take(tamanioPagina)
       .ToListAsync();

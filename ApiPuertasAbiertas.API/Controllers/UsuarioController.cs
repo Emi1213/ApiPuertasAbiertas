@@ -1,4 +1,3 @@
-using ApiPuertasAbiertas.Application.DTOs.Empresa;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using Microsoft.AspNetCore.Authorization;

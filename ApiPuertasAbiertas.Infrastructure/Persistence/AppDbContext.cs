@@ -14,6 +14,8 @@ public class AppDbContext : DbContext
   public DbSet<Personal> Personal => Set<Personal>();
   public DbSet<Perfil> Perfiles => Set<Perfil>();
   public DbSet<Ingreso> Ingresos => Set<Ingreso>();
+  public DbSet<Modulo> Modulos => Set<Modulo>();
+  public DbSet<ModuloPerfil> ModulosPerfiles => Set<ModuloPerfil>();
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     modelBuilder.ApplyConfiguration(new UsuarioConfiguration());
@@ -21,6 +23,8 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new PersonalConfiguration());
     modelBuilder.ApplyConfiguration(new PerfilConfiguration());
     modelBuilder.ApplyConfiguration(new IngresoConfiguration());
+    modelBuilder.ApplyConfiguration(new ModuloConfiguration());
+    modelBuilder.ApplyConfiguration(new ModuloPerfilConfiguration());
   }
 }
 
