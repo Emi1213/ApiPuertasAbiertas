@@ -1,17 +1,16 @@
 using System.DirectoryServices;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Application.Interfaces;
+using ApiPuertasAbiertas.Application.Common;
 
 namespace ApiPuertasAbiertas.Infrastructure.Services;
 
 public class ActiveDirectoryServices : IActiveDirectoryServices
 {
-  private const string DOMINIO = "otecel.com.ec";
-  private const string ACTIVE_DIRECTORY_PATH = "LDAP://" + DOMINIO;
   public bool ValidateActiveDirectoryLogin(string username, string pwd)
   {
-    var domainAndUsername = DOMINIO + @"\" + username;
-    var entry = new DirectoryEntry(ACTIVE_DIRECTORY_PATH, domainAndUsername, pwd);
+    var domainAndUsername = ActiveDirectoryConstants.Domain + @"\" + username;
+    var entry = new DirectoryEntry(ActiveDirectoryConstants.LdapPath, domainAndUsername, pwd);
     try
     {
       var obj = entry.NativeObject;
@@ -29,9 +28,9 @@ public class ActiveDirectoryServices : IActiveDirectoryServices
   public List<UsuarioActiveDirectoryDto> SearchUsersTop10(string bindUser, string bindPwd, string? query)
   {
     var list = new List<UsuarioActiveDirectoryDto>();
-    var upn = bindUser.Contains("@") ? bindUser : $"{bindUser}@{DOMINIO}";
+    var upn = bindUser.Contains("@") ? bindUser : $"{bindUser}@{ActiveDirectoryConstants.Domain}";
 
-    using var ad = new DirectoryEntry(ACTIVE_DIRECTORY_PATH, upn, bindPwd);
+    using var ad = new DirectoryEntry(ActiveDirectoryConstants.LdapPath, upn, bindPwd);
 
     var q = (query ?? "").Trim();
     var safe = EscapeLdap(q);
@@ -98,7 +97,7 @@ public class ActiveDirectoryServices : IActiveDirectoryServices
         {
           SamAccountName = sam,
           NombreParaMostrar = string.IsNullOrWhiteSpace(disp) ? $"{nom} {ape}".Trim() : disp,
-          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{DOMINIO}",
+          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{ActiveDirectoryConstants.Domain}",
           Correo = mail
         });
       }
@@ -132,7 +131,7 @@ public class ActiveDirectoryServices : IActiveDirectoryServices
         {
           SamAccountName = sam,
           NombreParaMostrar = string.IsNullOrWhiteSpace(disp) ? $"{nom} {ape}".Trim() : disp,
-          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{DOMINIO}",
+          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{ActiveDirectoryConstants.Domain}",
           Correo = mail
         });
       }

@@ -4,7 +4,7 @@ using System.Security.Claims;
 
 namespace ApiPuertasAbiertas.Application.UseCases.Usuarios;
 
-public class BuscarUsuariosActiveDirectoryUseCase
+public class BuscarUsuariosActiveDirectoryUseCase : IBuscarUsuariosActiveDirectoryUseCase
 {
   private readonly IActiveDirectoryServices _activeDirectoryServices;
 

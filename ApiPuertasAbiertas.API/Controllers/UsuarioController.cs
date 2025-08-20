@@ -11,12 +11,12 @@ public class UsuarioController : ControllerBase
 {
   private readonly UsuarioUseCases _usuarioUseCases;
   private readonly BuscarUsuariosUseCases _buscarUsuariosUseCases;
-  private readonly BuscarUsuariosActiveDirectoryUseCase _buscarUsuariosActiveDirectoryUseCase;
+  private readonly IBuscarUsuariosActiveDirectoryUseCase _buscarUsuariosActiveDirectoryUseCase;
 
   public UsuarioController(
     UsuarioUseCases usuarioUseCases,
     BuscarUsuariosUseCases buscarUsuariosUseCases,
-    BuscarUsuariosActiveDirectoryUseCase buscarUsuariosActiveDirectoryUseCase)
+    IBuscarUsuariosActiveDirectoryUseCase buscarUsuariosActiveDirectoryUseCase)
   {
     _usuarioUseCases = usuarioUseCases;
     _buscarUsuariosUseCases = buscarUsuariosUseCases;
@@ -46,8 +46,7 @@ public class UsuarioController : ControllerBase
   }
 
   [HttpGet("buscar-active-directory")]
-  public async Task<object> BuscarEnActiveDirectory(
-    [FromQuery] BusquedaActiveDirectoryRequestDto request)
+  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto request)
   {
     var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(request, User);
     return Results.Ok(usuarios);
