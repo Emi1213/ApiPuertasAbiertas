@@ -34,6 +34,7 @@ builder.Services.AddScoped<EmpresaUseCases>();
 builder.Services.AddScoped<BuscarEmpresasUseCase>();
 builder.Services.AddScoped<BuscarPersonalUseCases>();
 builder.Services.AddScoped<BuscarUsuariosUseCases>();
+builder.Services.AddScoped<BuscarUsuariosActiveDirectoryUseCase>();
 builder.Services.AddScoped<IngresoUseCases>();
 builder.Services.AddScoped<BuscarIngresosUseCases>();
 builder.Services.AddScoped<ModuloUseCases>();
@@ -122,8 +123,6 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         ValidateAudience = false,
         ValidateLifetime = false,
         ValidateIssuerSigningKey = true,
-        // ValidIssuer = jwtSettings["Issuer"],
-        // ValidAudience = jwtSettings["Audience"],
         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(clave!))
       };
     });

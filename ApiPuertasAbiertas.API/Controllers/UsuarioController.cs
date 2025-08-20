@@ -1,4 +1,5 @@
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
+using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,11 +11,16 @@ public class UsuarioController : ControllerBase
 {
   private readonly UsuarioUseCases _usuarioUseCases;
   private readonly BuscarUsuariosUseCases _buscarUsuariosUseCases;
+  private readonly BuscarUsuariosActiveDirectoryUseCase _buscarUsuariosActiveDirectoryUseCase;
 
-  public UsuarioController(UsuarioUseCases usuarioUseCases, BuscarUsuariosUseCases buscarUsuariosUseCases)
+  public UsuarioController(
+    UsuarioUseCases usuarioUseCases,
+    BuscarUsuariosUseCases buscarUsuariosUseCases,
+    BuscarUsuariosActiveDirectoryUseCase buscarUsuariosActiveDirectoryUseCase)
   {
     _usuarioUseCases = usuarioUseCases;
     _buscarUsuariosUseCases = buscarUsuariosUseCases;
+    _buscarUsuariosActiveDirectoryUseCase = buscarUsuariosActiveDirectoryUseCase;
   }
 
   [HttpGet]
@@ -37,6 +43,14 @@ public class UsuarioController : ControllerBase
   {
     var resultado = await _buscarUsuariosUseCases.ExecuteAsync(query);
     return Results.Ok(resultado);
+  }
+
+  [HttpGet("buscar-active-directory")]
+  public async Task<object> BuscarEnActiveDirectory(
+    [FromQuery] BusquedaActiveDirectoryRequestDto request)
+  {
+    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(request, User);
+    return Results.Ok(usuarios);
   }
 
   [HttpPost]

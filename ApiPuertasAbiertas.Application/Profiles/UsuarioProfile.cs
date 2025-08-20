@@ -18,7 +18,6 @@ public class UsuarioProfile : Profile
     CreateMap<Usuario, CrearUsuarioDto>()
         .ForMember(dest => dest.Usuario, opt => opt.MapFrom(src => src.NombreUsuario));
 
-    // Para actualización
     CreateMap<ActualizarUsuarioDto, Usuario>()
         .ForMember(dest => dest.NombreUsuario, opt => opt.MapFrom(src => src.Usuario));
 

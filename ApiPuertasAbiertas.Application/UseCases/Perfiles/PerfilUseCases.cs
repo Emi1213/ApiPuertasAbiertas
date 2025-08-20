@@ -41,13 +41,11 @@ public class PerfilUseCases
     var perfil = _mapper.Map<Domain.Entities.Perfil>(crearPerfilDto);
     await _perfilRepository.CrearAsync(perfil);
 
-    // Asignar módulos si se proporcionaron
     if (crearPerfilDto.ModulosIds.Any())
     {
       await _moduloPerfilRepository.AsignarModulosAsync(perfil.Id, crearPerfilDto.ModulosIds);
     }
 
-    // Obtener el perfil creado con módulos
     var perfilCreado = await _perfilRepository.ObtenerPorIdAsync(perfil.Id);
     return _mapper.Map<PerfilDto>(perfilCreado);
   }
@@ -63,14 +61,12 @@ public class PerfilUseCases
     _mapper.Map(actualizarPerfilDto, perfilExistente);
     await _perfilRepository.ActualizarAsync(perfilExistente);
 
-    // Actualizar módulos
     await _moduloPerfilRepository.EliminarPorPerfilAsync(actualizarPerfilDto.Id);
     if (actualizarPerfilDto.ModulosIds.Any())
     {
       await _moduloPerfilRepository.AsignarModulosAsync(actualizarPerfilDto.Id, actualizarPerfilDto.ModulosIds);
     }
 
-    // Notificar cambios a usuarios con este perfil
     await _notifier.NotificarCambioModulosAsync(actualizarPerfilDto.Id);
   }
 
@@ -82,11 +78,9 @@ public class PerfilUseCases
       throw new KeyNotFoundException("Perfil no encontrado");
     }
 
-    // Eliminar módulos asociados
     await _moduloPerfilRepository.EliminarPorPerfilAsync(id);
     await _perfilRepository.EliminarAsync(id);
 
-    // Notificar cambios
     await _notifier.NotificarCambioModulosAsync(id);
   }
 }

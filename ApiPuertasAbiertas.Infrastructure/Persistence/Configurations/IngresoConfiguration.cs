@@ -43,7 +43,6 @@ public class IngresoConfiguration : IEntityTypeConfiguration<Ingreso>
     builder.Property(i => i.UsuarioReconId)
         .HasColumnName("Id_Usuario");
 
-    // Configuración del enum como entero (más eficiente)
     builder.Property(i => i.Estado)
         .HasColumnName("Estado")
         .HasConversion<int>();
