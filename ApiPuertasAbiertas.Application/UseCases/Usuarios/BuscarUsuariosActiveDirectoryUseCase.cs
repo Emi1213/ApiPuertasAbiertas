@@ -13,21 +13,21 @@ public class BuscarUsuariosActiveDirectoryUseCase : IBuscarUsuariosActiveDirecto
     _activeDirectoryServices = activeDirectoryServices;
   }
 
-  public async Task<List<UsuarioActiveDirectoryDto>> ExecuteAsync(BusquedaActiveDirectoryRequestDto request, ClaimsPrincipal? user = null)
+  public async Task<List<UsuarioActiveDirectoryDto>> ExecuteAsync(BusquedaActiveDirectoryRequestDto request, ClaimsPrincipal? usuario = null)
   {
-    string username = request.Usuario ?? "";
-    string password = request.Contrasenia ?? "";
+    string nombreUsuario = request.Usuario ?? "";
+    string contrasenia = request.Contrasenia ?? "";
 
-    if (string.IsNullOrWhiteSpace(username) && user != null)
+    if (string.IsNullOrWhiteSpace(nombreUsuario) && usuario != null)
     {
-      var userNameClaim = user.FindFirst(ClaimTypes.Name);
-      if (userNameClaim != null)
+      var claimNombreUsuario = usuario.FindFirst(ClaimTypes.Name);
+      if (claimNombreUsuario != null)
       {
-        username = userNameClaim.Value;
+        nombreUsuario = claimNombreUsuario.Value;
       }
     }
 
-    if (string.IsNullOrWhiteSpace(username))
+    if (string.IsNullOrWhiteSpace(nombreUsuario))
     {
       throw new ArgumentException("Se requiere usuario para realizar la búsqueda. Proporcione 'usuario' y 'contrasenia' como query parameters.");
     }
@@ -39,7 +39,7 @@ public class BuscarUsuariosActiveDirectoryUseCase : IBuscarUsuariosActiveDirecto
       try
       {
         cts.Token.ThrowIfCancellationRequested();
-        return _activeDirectoryServices.SearchUsersTop10(username, password, request.Query);
+        return _activeDirectoryServices.SearchUsersTop10(nombreUsuario, contrasenia, request.Query);
       }
       catch (OperationCanceledException)
       {

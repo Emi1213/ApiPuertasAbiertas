@@ -34,13 +34,13 @@ public class PersonalUseCases
 
   public async Task ActualizarAsync(ActualizarPersonalDto actualizarPersonalDto)
   {
-    var existingPersonal = await _personalRepository.ObtenerPorIdAsync(actualizarPersonalDto.Id);
-    if (existingPersonal == null)
+    var personalExistente = await _personalRepository.ObtenerPorIdAsync(actualizarPersonalDto.Id);
+    if (personalExistente == null)
     {
       throw new KeyNotFoundException("Personal no encontrado");
     }
-    _mapper.Map(actualizarPersonalDto, existingPersonal);
-    await _personalRepository.ActualizarAsync(existingPersonal);
+    _mapper.Map(actualizarPersonalDto, personalExistente);
+    await _personalRepository.ActualizarAsync(personalExistente);
   }
 
   public async Task EliminarAsync(int id)

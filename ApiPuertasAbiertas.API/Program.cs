@@ -10,23 +10,15 @@ using ApiPuertasAbiertas.Shared.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Database
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Application Services
 builder.Services.AddApplicationServices();
 builder.Services.AddInfrastructureServices();
 builder.Services.AddAutoMapperProfiles();
 
-// SignalR
-builder.Services.AddScoped<IRbacNotifier, RbacNotifier>();
-builder.Services.AddSignalR();
-
-// Controllers
 builder.Services.AddControllers();
 
-// Swagger
 builder.Services.AddSwaggerGen(c =>
 {
   c.SwaggerDoc("v1", new() { Title = "API Puertas Abiertas", Version = "v1" });
@@ -57,7 +49,6 @@ builder.Services.AddSwaggerGen(c =>
     });
 });
 
-// CORS
 builder.Services.AddCors(options =>
 {
   options.AddPolicy("AllowAll",
@@ -73,7 +64,6 @@ builder.Services.AddResponseCompression(options =>
   options.EnableForHttps = true;
 });
 
-// JWT Authentication
 var jwtSettings = builder.Configuration.GetSection("JwtSettings");
 var clave = jwtSettings["Key"];
 

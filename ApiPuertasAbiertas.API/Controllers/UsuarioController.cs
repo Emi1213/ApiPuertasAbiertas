@@ -38,17 +38,18 @@ public class UsuarioController : ControllerBase
       throw new KeyNotFoundException("Usuario no encontrado.");
     return Results.Ok(usuario);
   }
-  [HttpGet("buscar")]
-  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery query)
+
+  [HttpPost("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery consulta)
   {
-    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(query);
+    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(consulta);
     return Results.Ok(resultado);
   }
 
-  [HttpGet("buscar-active-directory")]
-  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto request)
+  [HttpPost("buscar-ad")]
+  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto solicitud)
   {
-    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(request, User);
+    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(solicitud, User);
     return Results.Ok(usuarios);
   }
 
@@ -65,7 +66,6 @@ public class UsuarioController : ControllerBase
     if (id != dto.Id) return Results.BadRequest("El ID del usuario no coincide.");
     await _usuarioUseCases.ActualizarAsync(dto);
     return Results.Ok("Usuario actualizado exitosamente.");
-
   }
 
   [HttpDelete("{id}")]
