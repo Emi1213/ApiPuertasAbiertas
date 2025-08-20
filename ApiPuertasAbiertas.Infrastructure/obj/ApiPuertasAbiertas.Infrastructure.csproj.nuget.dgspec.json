@@ -199,6 +199,10 @@
             "Microsoft.EntityFrameworkCore.SqlServer": {
               "target": "Package",
               "version": "[9.0.7, )"
+            },
+            "System.DirectoryServices": {
+              "target": "Package",
+              "version": "[9.0.8, )"
             }
           },
           "imports": [

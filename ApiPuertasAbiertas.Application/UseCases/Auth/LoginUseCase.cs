@@ -8,16 +8,33 @@ public class LoginUseCase
 {
   private readonly IServicioAuth _servicioAuth;
   private readonly IUsuarioRepository _usuarioRepository;
+  private readonly IActiveDirectoryServices _activeDirectoryServices;
 
-  public LoginUseCase(IServicioAuth servicioAuth, IUsuarioRepository usuarioRepository)
+  public LoginUseCase(IServicioAuth servicioAuth, IUsuarioRepository usuarioRepository, IActiveDirectoryServices activeDirectoryServices)
   {
     _servicioAuth = servicioAuth;
     _usuarioRepository = usuarioRepository;
+    _activeDirectoryServices = activeDirectoryServices;
   }
 
   public async Task<LoginResponseDto?> ExecuteAsync(string usuario, string contrasenia)
   {
-    var usuarioEncontrado = await _usuarioRepository.BuscarPorCredencialesAsync(usuario, contrasenia);
+    bool credencialesValidasAD;
+    try
+    {
+      credencialesValidasAD = _activeDirectoryServices.ValidateActiveDirectoryLogin(usuario, contrasenia);
+    }
+    catch (Exception)
+    {
+      return null;
+    }
+
+    if (!credencialesValidasAD)
+    {
+      return null;
+    }
+
+    var usuarioEncontrado = await _usuarioRepository.ObtenerPorNombreUsuarioAsync(usuario);
 
     if (usuarioEncontrado == null)
     {

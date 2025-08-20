@@ -13,10 +13,12 @@ public class UsuarioRepository : IUsuarioRepository
   {
     _context = context;
   }
-  public async Task<Usuario?> BuscarPorCredencialesAsync(string usuario, string contrasenia)
+
+  public async Task<Usuario?> ObtenerPorNombreUsuarioAsync(string nombreUsuario)
   {
-    return await _context.Usuarios.Include(u => u.Perfil)
-            .FirstOrDefaultAsync(u => u.NombreUsuario == usuario && u.Contrasenia == contrasenia);
+    return await _context.Usuarios
+            .Include(u => u.Perfil)
+            .FirstOrDefaultAsync(u => u.NombreUsuario == nombreUsuario);
   }
 
   public async Task<List<Usuario>> ObtenerTodosAsync()
@@ -61,9 +63,6 @@ public class UsuarioRepository : IUsuarioRepository
     {
       query = query.Where(u => u.NombreUsuario.Contains(busqueda) || u.Nombre.Contains(busqueda));
     }
-
-    // Solo filtrar por perfilId si se especifica explícitamente y es mayor que 0
-    // Si no se especifica o es 0/null, devolver todos los usuarios (incluidos los sin perfil)
     if (perfilId.HasValue && perfilId.Value > 0)
     {
       query = query.Where(u => u.PerfilId == perfilId.Value);

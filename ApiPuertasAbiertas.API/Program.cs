@@ -27,6 +27,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 
 builder.Services.AddScoped<IServicioAuth, ServicioAuth>();
+builder.Services.AddScoped<IActiveDirectoryServices, ActiveDirectoryServices>();
 builder.Services.AddScoped<LoginUseCase>();
 builder.Services.AddScoped<UsuarioUseCases>();
 builder.Services.AddScoped<EmpresaUseCases>();
