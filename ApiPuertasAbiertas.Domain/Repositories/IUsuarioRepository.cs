@@ -4,7 +4,7 @@ namespace ApiPuertasAbiertas.Domain.Repositories;
 
 public interface IUsuarioRepository
 {
-  Task<Usuario?> BuscarPorCredencialesAsync(string usuario, string contrasenia);
+  Task<Usuario?> ObtenerPorNombreUsuarioAsync(string nombreUsuario);
   Task<List<Usuario>> ObtenerTodosAsync();
   Task<Usuario?> ObtenerPorIdAsync(int id);
   Task CrearAsync(Usuario usuario);

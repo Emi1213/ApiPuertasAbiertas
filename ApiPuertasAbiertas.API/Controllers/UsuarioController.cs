@@ -1,4 +1,5 @@
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
+using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Application.UseCases.Usuarios;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -10,17 +11,36 @@ public class UsuarioController : ControllerBase
 {
   private readonly UsuarioUseCases _usuarioUseCases;
   private readonly BuscarUsuariosUseCases _buscarUsuariosUseCases;
+  private readonly IBuscarUsuariosActiveDirectoryUseCase _buscarUsuariosActiveDirectoryUseCase;
 
-  public UsuarioController(UsuarioUseCases usuarioUseCases, BuscarUsuariosUseCases buscarUsuariosUseCases)
+  public UsuarioController(
+    UsuarioUseCases usuarioUseCases,
+    BuscarUsuariosUseCases buscarUsuariosUseCases,
+    IBuscarUsuariosActiveDirectoryUseCase buscarUsuariosActiveDirectoryUseCase)
   {
     _usuarioUseCases = usuarioUseCases;
     _buscarUsuariosUseCases = buscarUsuariosUseCases;
+    _buscarUsuariosActiveDirectoryUseCase = buscarUsuariosActiveDirectoryUseCase;
   }
 
   [HttpGet]
   public async Task<object> ObtenerTodos()
   {
     var usuarios = await _usuarioUseCases.ObtenerTodosAsync();
+    return Results.Ok(usuarios);
+  }
+
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery consulta)
+  {
+    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(consulta);
+    return Results.Ok(resultado);
+  }
+
+  [HttpGet("buscar-ad")]
+  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto solicitud)
+  {
+    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(solicitud, User);
     return Results.Ok(usuarios);
   }
 
@@ -31,12 +51,6 @@ public class UsuarioController : ControllerBase
     if (usuario == null)
       throw new KeyNotFoundException("Usuario no encontrado.");
     return Results.Ok(usuario);
-  }
-  [HttpGet("buscar")]
-  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery query)
-  {
-    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(query);
-    return Results.Ok(resultado);
   }
 
   [HttpPost]
@@ -52,7 +66,6 @@ public class UsuarioController : ControllerBase
     if (id != dto.Id) return Results.BadRequest("El ID del usuario no coincide.");
     await _usuarioUseCases.ActualizarAsync(dto);
     return Results.Ok("Usuario actualizado exitosamente.");
-
   }
 
   [HttpDelete("{id}")]
