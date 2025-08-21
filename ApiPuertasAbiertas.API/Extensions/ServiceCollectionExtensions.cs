@@ -1,3 +1,4 @@
+using ApiPuertasAbiertas.Application.Common;
 using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Application.Profiles;
 using ApiPuertasAbiertas.Application.UseCases.Auth;
@@ -16,6 +17,14 @@ namespace ApiPuertasAbiertas.API.Extensions;
 
 public static class ServiceCollectionExtensions
 {
+  public static IServiceCollection AddConfigurationOptions(this IServiceCollection services, IConfiguration configuration)
+  {
+    services.Configure<ActiveDirectorySettings>(
+        configuration.GetSection("ActiveDirectorySettings"));
+
+    return services;
+  }
+
   public static IServiceCollection AddApplicationServices(this IServiceCollection services)
   {
     services.AddScoped<LoginUseCase>();
