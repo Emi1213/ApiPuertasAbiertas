@@ -30,6 +30,20 @@ public class UsuarioController : ControllerBase
     return Results.Ok(usuarios);
   }
 
+  [HttpGet("buscar")]
+  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery consulta)
+  {
+    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(consulta);
+    return Results.Ok(resultado);
+  }
+
+  [HttpGet("buscar-ad")]
+  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto solicitud)
+  {
+    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(solicitud, User);
+    return Results.Ok(usuarios);
+  }
+
   [HttpGet("{id}")]
   public async Task<object> ObtenerPorId(int id)
   {
@@ -37,20 +51,6 @@ public class UsuarioController : ControllerBase
     if (usuario == null)
       throw new KeyNotFoundException("Usuario no encontrado.");
     return Results.Ok(usuario);
-  }
-
-  [HttpPost("buscar")]
-  public async Task<object> BuscarConFiltros([FromQuery] BuscarUsuariosQuery consulta)
-  {
-    var resultado = await _buscarUsuariosUseCases.ExecuteAsync(consulta);
-    return Results.Ok(resultado);
-  }
-
-  [HttpPost("buscar-ad")]
-  public async Task<object> BuscarEnActiveDirectory([FromQuery] BusquedaActiveDirectoryRequestDto solicitud)
-  {
-    var usuarios = await _buscarUsuariosActiveDirectoryUseCase.ExecuteAsync(solicitud, User);
-    return Results.Ok(usuarios);
   }
 
   [HttpPost]

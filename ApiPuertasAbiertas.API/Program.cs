@@ -5,8 +5,6 @@ using ApiPuertasAbiertas.API.Extensions;
 using System.Text;
 using ApiPuertasAbiertas.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
-using ApiPuertasAbiertas.API.Realtime;
-using ApiPuertasAbiertas.Shared.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
