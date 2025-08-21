@@ -23,18 +23,13 @@ public class UsuarioConfiguration : IEntityTypeConfiguration<Usuario>
     builder.Property(u => u.Descripcion)
         .HasMaxLength(500);
 
-    builder.Property(u => u.Contrasenia)
-        .IsRequired()
-        .HasMaxLength(255);
-
     builder.Property(u => u.PerfilId)
-    .HasColumnName("Id_Perfil")
-    .IsRequired();
+        .HasColumnName("Id_Perfil")
+        .IsRequired(false); 
 
     builder.HasOne(u => u.Perfil)
-      .WithMany(p => p.Usuarios)
-      .HasForeignKey(u => u.PerfilId)
-      .OnDelete(DeleteBehavior.Cascade);
-
+        .WithMany(p => p.Usuarios)
+        .HasForeignKey(u => u.PerfilId)
+        .OnDelete(DeleteBehavior.SetNull);  
   }
 }

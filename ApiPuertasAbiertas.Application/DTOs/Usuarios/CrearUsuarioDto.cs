@@ -9,8 +9,5 @@ public class CrearUsuarioDto
   [Required(ErrorMessage = "El nombre es obligatorio.")]
   public required string Nombre { get; set; }
   public string? Descripcion { get; set; }
-  [Required(ErrorMessage = "La contraseña es obligatoria.")]
-  public required string Contrasenia { get; set; }
-  [Required(ErrorMessage = "El perfil es obligatorio.")]
-  public required int PerfilId { get; set; }
+  public int? PerfilId { get; set; }
 }

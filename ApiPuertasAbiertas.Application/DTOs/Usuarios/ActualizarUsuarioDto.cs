@@ -6,5 +6,5 @@ public class ActualizarUsuarioDto
   public string? Usuario { get; set; }
   public string? Nombre { get; set; }
   public string? Descripcion { get; set; }
-  public int PerfilId { get; set; }
+  public int? PerfilId { get; set; }
 }

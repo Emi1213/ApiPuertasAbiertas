@@ -41,11 +41,9 @@ public class IngresoUseCases
   {
     var ingreso = _mapper.Map<Domain.Entities.Ingreso>(crearIngresoDto);
 
-    // Establecer valores automáticos
     ingreso.UsuarioReconId = usuarioId;
     ingreso.FechaRecon = _clock.Now;
 
-    // Calcular duración y estado según si hay fecha fin
     if (ingreso.FechaFin.HasValue)
     {
       var duracion = ingreso.FechaFin.Value - ingreso.FechaInicio;
@@ -60,7 +58,6 @@ public class IngresoUseCases
 
     await _ingresoRepository.CrearAsync(ingreso);
 
-    // Obtener el ingreso creado con todas las relaciones
     var ingresoCreado = await _ingresoRepository.ObtenerPorIdAsync(ingreso.Id);
     return _mapper.Map<IngresoDto>(ingresoCreado);
   }
@@ -73,10 +70,8 @@ public class IngresoUseCases
       throw new KeyNotFoundException("Ingreso no encontrado");
     }
 
-    // Mapear los cambios sobre la entidad existente (que ya está trackeada)
     _mapper.Map(actualizarIngresoDto, ingresoExistente);
 
-    // Recalcular duración y estado según si hay fecha fin
     if (ingresoExistente.FechaFin.HasValue)
     {
       var duracion = ingresoExistente.FechaFin.Value - ingresoExistente.FechaInicio;
