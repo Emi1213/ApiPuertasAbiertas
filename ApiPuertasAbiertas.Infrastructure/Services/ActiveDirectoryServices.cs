@@ -2,11 +2,18 @@ using System.DirectoryServices;
 using ApiPuertasAbiertas.Application.DTOs.Usuarios;
 using ApiPuertasAbiertas.Application.Interfaces;
 using ApiPuertasAbiertas.Application.Common;
+using Microsoft.Extensions.Options;
 
 namespace ApiPuertasAbiertas.Infrastructure.Services;
 
 public class ActiveDirectoryServices : IActiveDirectoryServices
 {
+  private readonly ActiveDirectorySettings _adSettings;
+
+  public ActiveDirectoryServices(IOptions<ActiveDirectorySettings> adSettings)
+  {
+    _adSettings = adSettings.Value;
+  }
   public bool ValidateActiveDirectoryLogin(string nombreUsuario, string contrasenia)
   {
     var dominioYUsuario = ActiveDirectoryConstants.Domain + @"\" + nombreUsuario;
@@ -25,44 +32,42 @@ public class ActiveDirectoryServices : IActiveDirectoryServices
     }
   }
 
-  public List<UsuarioActiveDirectoryDto> SearchUsersTop10(string usuarioConexion, string contraseniaConexion, string? consulta)
+  public List<UsuarioActiveDirectoryDto> SearchUsersTop10(string? consulta)
   {
-    var listaUsuarios = new List<UsuarioActiveDirectoryDto>();
-    var upn = usuarioConexion.Contains("@") ? usuarioConexion : $"{usuarioConexion}@{ActiveDirectoryConstants.Domain}";
+    var upn = _adSettings.Usuario.Contains("@")
+      ? _adSettings.Usuario
+      : $"{_adSettings.Usuario}@{ActiveDirectoryConstants.Domain}";
 
-    using var ad = new DirectoryEntry(ActiveDirectoryConstants.LdapPath, upn, contraseniaConexion);
+    using var ad = new DirectoryEntry(ActiveDirectoryConstants.LdapPath, upn, _adSettings.Contrasenia);
 
-    var consultaLimpia = (consulta ?? "").Trim();
-    var consultaSegura = EscapeLdap(consultaLimpia);
+    string BuildFilter(string? q)
+    {
+      const string baseFiltro =
+        "(&(objectCategory=person)(objectClass=user)" +
+        "(!(userAccountControl:1.2.840.113556.1.4.803:=2))";
 
+      q = (q ?? "").Trim();
+      if (q.Length == 0) return baseFiltro + ")";
+
+      var safe = EscapeLdap(q);
+      var term = $"*{safe}*";
+
+      return baseFiltro +
+            $"(|(anr={term})(displayName={term})(sAMAccountName={term})(userPrincipalName={term})(mail={term}))" +
+            ")";
+    }
     using var searcher = new DirectorySearcher(ad)
     {
       CacheResults = false,
       ClientTimeout = TimeSpan.FromSeconds(6),
       ServerTimeLimit = TimeSpan.FromSeconds(6),
       ReferralChasing = ReferralChasingOption.None,
-      SearchScope = SearchScope.Subtree
+      SearchScope = SearchScope.Subtree,
+      PageSize = 10,
+      SizeLimit = 10,
+      Sort = new SortOption("sAMAccountName", SortDirection.Ascending),
+      Filter = BuildFilter(consulta)
     };
-
-    if (string.IsNullOrWhiteSpace(consultaSegura))
-    {
-      searcher.Filter =
-        "(&(objectCategory=person)(objectClass=user)" +
-        "(!(userAccountControl:1.2.840.113556.1.4.803:=2)))";
-    }
-    else
-    {
-      var prefijo = consultaSegura + "*";
-      searcher.Filter =
-        "(&(objectCategory=person)(objectClass=user)" +
-        "(!(userAccountControl:1.2.840.113556.1.4.803:=2))" +
-        "(|(sAMAccountName=" + prefijo + ")" +
-          "(userPrincipalName=" + prefijo + ")" +
-          "(mail=" + prefijo + ")" +
-          "(displayName=" + prefijo + ")))";
-    }
-
-
     searcher.PropertiesToLoad.Add("sAMAccountName");
     searcher.PropertiesToLoad.Add("displayName");
     searcher.PropertiesToLoad.Add("givenName");
@@ -71,74 +76,36 @@ public class ActiveDirectoryServices : IActiveDirectoryServices
 
     try
     {
-      searcher.Sort = new SortOption("sAMAccountName", SortDirection.Ascending);
-
-      var vlv = new DirectoryVirtualListView
-      {
-        BeforeCount = 0,
-        AfterCount = 9,
-        Offset = 1
-      };
-      searcher.VirtualListView = vlv;
-
       using var results = searcher.FindAll();
-      foreach (SearchResult r in results)
-      {
-        string Get(string a) =>
-          r.Properties.Contains(a) && r.Properties[a].Count > 0 ? r.Properties[a][0]?.ToString() ?? "" : "";
+      string Get(SearchResult r, string p) =>
+        r.Properties.Contains(p) && r.Properties[p].Count > 0 ? r.Properties[p][0]?.ToString() ?? "" : "";
 
-        var sam = Get("sAMAccountName");
-        var disp = Get("displayName");
-        var nom = Get("givenName");
-        var ape = Get("sn");
-        var mail = Get("mail");
+      return results.Cast<SearchResult>()
+                    .Take(10)
+                    .Select(r =>
+                    {
+                      var sam = Get(r, "sAMAccountName");
+                      var disp = Get(r, "displayName");
+                      var nom = Get(r, "givenName");
+                      var ape = Get(r, "sn");
+                      var mail = Get(r, "mail");
 
-        listaUsuarios.Add(new UsuarioActiveDirectoryDto
-        {
-          SamAccountName = sam,
-          NombreParaMostrar = string.IsNullOrWhiteSpace(disp) ? $"{nom} {ape}".Trim() : disp,
-          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{ActiveDirectoryConstants.Domain}",
-          Correo = mail
-        });
-      }
-      if (listaUsuarios.Count <= 10) return listaUsuarios;
-      return listaUsuarios.Take(10).ToList();
+                      return new UsuarioActiveDirectoryDto
+                      {
+                        SamAccountName = sam,
+                        NombreParaMostrar = string.IsNullOrWhiteSpace(disp) ? $"{nom} {ape}".Trim() : disp,
+                        UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{ActiveDirectoryConstants.Domain}",
+                        Correo = mail
+                      };
+                    })
+                    .ToList();
     }
     catch
     {
+      return new List<UsuarioActiveDirectoryDto>();
     }
-    listaUsuarios.Clear();
-    searcher.VirtualListView = null;
-    searcher.PageSize = 10;
-    searcher.SizeLimit = 10;
-
-    using (var results = searcher.FindAll())
-    {
-      int count = Math.Min(results.Count, 10);
-      for (int i = 0; i < count; i++)
-      {
-        var r = results[i];
-        string Get(string a) =>
-          r.Properties.Contains(a) && r.Properties[a].Count > 0 ? r.Properties[a][0]?.ToString() ?? "" : "";
-
-        var sam = Get("sAMAccountName");
-        var disp = Get("displayName");
-        var nom = Get("givenName");
-        var ape = Get("sn");
-        var mail = Get("mail");
-
-        listaUsuarios.Add(new UsuarioActiveDirectoryDto
-        {
-          SamAccountName = sam,
-          NombreParaMostrar = string.IsNullOrWhiteSpace(disp) ? $"{nom} {ape}".Trim() : disp,
-          UsuarioNombre = sam.Contains("@") ? sam : $"{sam}@{ActiveDirectoryConstants.Domain}",
-          Correo = mail
-        });
-      }
-    }
-
-    return listaUsuarios;
   }
+
 
 
   private static string EscapeLdap(string s)
